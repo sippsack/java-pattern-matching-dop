@@ -28,6 +28,11 @@ GitHub Pages ist im Repository unter **Settings → Pages → Source: GitHub Act
 konfiguriert. Die Domain `www.sippsack.de` wird von der Benutzerwebsite geerbt;
 dieses Repository benötigt keine eigene `CNAME`-Datei.
 
+Unter **Settings → Environments → github-pages → Deployment branches and tags**
+sind der Branch `main` und Tags nach `published/*` freigegeben. Ohne die
+Tag-Freigabe blockiert GitHub das Deployment des Tag-Workflows trotz erfolgreichem
+Build.
+
 Der Workflow **Publish slides to GitHub Pages** baut und veröffentlicht bei
 Änderungen unter `slides/`, an den Veröffentlichungsworkflows oder am
 Buildskript auf `main`. Er kann auch manuell gestartet werden.
