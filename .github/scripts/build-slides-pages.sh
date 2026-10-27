@@ -22,11 +22,16 @@ while IFS= read -r tag; do
   fi
 done < "$temporary/tags"
 
-(
-  cd slides
-  npm ci
-  npm run build -- --base "$base/" --out "$output"
-)
+build_slides() {
+  (
+    cd "$1"
+    npm ci
+    npm run build -- --base "$2/" --out "$3"
+    node "$root/.github/scripts/create-slides-routes.mjs" "$3"
+  )
+}
+
+build_slides "$root/slides" "$base" "$output"
 
 while IFS= read -r tag; do
   version="${tag#published/}"
@@ -39,10 +44,6 @@ while IFS= read -r tag; do
   source="$temporary/$version"
   mkdir -p "$source"
   git archive "$tag" slides | tar -x -C "$source"
-  (
-    cd "$source/slides"
-    npm ci
-    npm run build -- --base "$base/$version/" --out "$output/$version"
-  )
+  build_slides "$source/slides" "$base/$version" "$output/$version"
   echo "::endgroup::"
 done < "$temporary/tags"

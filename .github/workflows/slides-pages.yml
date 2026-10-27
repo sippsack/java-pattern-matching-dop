@@ -6,7 +6,7 @@ on:
     paths:
       - 'slides/**'
       - '.github/workflows/slides-*.yml'
-      - '.github/scripts/build-slides-pages.sh'
+      - '.github/scripts/**'
   workflow_dispatch:
   workflow_call:
 

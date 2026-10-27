@@ -33,6 +33,11 @@ sind der Branch `main` und Tags nach `published/*` freigegeben. Ohne die
 Tag-Freigabe blockiert GitHub das Deployment des Tag-Workflows trotz erfolgreichem
 Build.
 
+Für direkte Folienlinks erzeugt der Build statische Einstiegspunkte, auch für
+Präsentations-, Übersichts- und Druckansicht. GitHub Pages kann so jede
+Vortragsversion ohne Rückgriff auf die `404.html` der aktuellen Fassung öffnen.
+Dabei kann Pages einen abschließenden Schrägstrich an die URL anhängen.
+
 Der Workflow **Publish slides to GitHub Pages** baut und veröffentlicht bei
 Änderungen unter `slides/`, an den Veröffentlichungsworkflows oder am
 Buildskript auf `main`. Er kann auch manuell gestartet werden.
