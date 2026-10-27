@@ -25,7 +25,7 @@ image: /duke/duke-shapes.png
 
 ::date::
 
-Oktober 2026 · TODO Event
+Oktober 2026 · betterCode Java
 
 <!--
 Titelfolie. TODO: Event/Konferenz und Datum eintragen, ggf. Event-Logo ergänzen.
@@ -1074,6 +1074,26 @@ Wird separat vorbereitet. Demos aus Anhang B-D des Material-Exports (MedicationP
 -->
 
 ---
+
+# Live-Coding: Code zum Mitmachen
+
+<Keyboard class="abs" style="left:-10px;top:135px;width:980px;opacity:0.35;z-index:0" />
+
+<div class="abs center" style="left:57px;top:235px;width:846px;z-index:1">
+  <div class="card" style="display:inline-block;padding:10px 28px 14px;background:#ffffffeb">
+    <p class="small muted" style="margin:0 0 4px">Den Code gibt es auf GitHub</p>
+    <p style="font-size:36px;font-weight:700;margin:0;white-space:nowrap">
+      <a href="https://github.com/sippsack/java-dop-pattern-matching">github.com/sippsack/java-dop-pattern-matching</a>
+    </p>
+  </div>
+</div>
+
+<!--
+Repo: https://github.com/sippsack/java-dop-pattern-matching
+Jeder Schritt der Demo ist ein eigener Branch bzw. Stand, damit man später zu Hause nachvollziehen kann.
+-->
+
+---
 layout: section
 number: '04'
 image: /duke/duke-binoculars.png
@@ -1085,19 +1105,103 @@ Was fehlt noch? Was ist in Arbeit?
 
 ---
 
-# Was fehlt noch?
+# Ausblick: Was kommt als Nächstes?
+
+<AmberOverview />
 
 <!--
-TODO: bewusst leer, Links zu den Mailinglisten kommen später.
+Kernaussage: Deconstruction (und Reconstruction) wird ein First-Class-Konzept im Java-Typsystem. Alles hier sind Designrichtungen aus Project Amber (Mailinglisten 2025/2026), keine beschlossenen Features, Syntax nicht final.
+Konkret in Arbeit:
+- Pattern Assignment: Ein Pattern zerlegt einen Wert direkt per Zuweisung, z. B. `Point(var x, var y) = point;`, ganz ohne Fallunterscheidung, weil der Compiler den Typ schon kennt.
+- Patterns in for-each: Im Schleifenkopf lässt sich das Element sofort zerlegen, z. B. `for (Map.Entry(var key, var value) : map.entrySet())`, und der Boilerplate mit getKey()/getValue() entfällt.
+- Dekonstruierbare Klassen: Auch normale Klassen sollen ihren öffentlichen Zustand per Pattern preisgeben können (nicht nur Records), ohne ihre interne Repräsentation offenzulegen.
+- Dekonstruierbare Interfaces: Ein Interface kann einen sichtbaren Zustand beschreiben, sodass Pattern Matching möglich bleibt, während die Implementierung gekapselt ist.
+- with-Ausdrücke: Aus einem bestehenden Objekt entsteht eine Kopie mit einzelnen geänderten Komponenten, z. B. `address with { city = "Darmstadt"; }` (JEP 468, Derived Record Creation).
+- Bessere Serialisierung: Weil eine Klasse ihren Zustand explizit beschreibt und über den Konstruktor neu aufgebaut wird, können Serializer ohne Reflection auf private Felder arbeiten und Invarianten bleiben erhalten.
+
+Eher Vision:
+- Nominale Patterns: Komponenten werden statt über ihre Position über ihren Namen angesprochen, das ist bei großen Records deutlich lesbarer (Syntax offen).
+- Record-Evolution: Wenn ein Record neue Komponenten am Ende bekommt, sollen alte Patterns (Prefix Patterns) weiter funktionieren, wichtig für öffentliche APIs.
+- Member-Patterns: Patterns analog zu Konstruktoren, Factory- und Instanzmethoden, z. B. `value instanceof Optional.of(var x)`, eine langfristige Vision.
+
+Quelle: future-of-pattern-matching-java-amber.md
 -->
 
 ---
 
-# Was ist in Arbeit?
+# Ausblick: Dekonstruktion überall <span class="badge">Syntax nicht final</span>
+
+<div class="codewrap code-sm" style="position:relative">
+
+```java
+class Infusion(int speed, int duration) {
+    private final Rate rate;
+}
+
+interface Medication(Drug drug, Dosage dosage) { }
+
+
+Medication(var drug, Infusion(var speed, _)) = med;
+
+
+for (Map.Entry(var drug, var dose) : plan.entrySet()) {
+    IO.println(drug + ": " + dose);
+}
+```
+
+<Callout v-click :line="1" :col="42" title="Dekonstruierbare Klasse" text="State Description im Kopf" />
+<Callout v-click :line="5" :col="51" title="Dekonstruierbares Interface" text="Implementierung verborgen" />
+<Callout v-click :line="8" :col="52" title="Pattern Assignment" text="Zerlegen ohne if oder switch" />
+<Callout v-click :line="11" :col="56" title="Pattern im for-each" text="Kein getKey() / getValue()" />
+
+</div>
 
 <!--
-TODO: bewusst leer, Links zu den Mailinglisten kommen später.
-Kandidaten: Carrier Classes (veränderliche Alternative zu Records), Dekonstruktion beliebiger Klassen, vereinfachte (De-)Serialisierung, Withers.
+Alles hier sind Designrichtungen aus Project Amber, die Syntax ist nicht final.
+1. Dekonstruierbare Klasse: Eine normale Klasse beschreibt im Kopf ihren öffentlichen Zustand (State Description). Die internen Felder können anders aussehen und bleiben privat. Früher "Carrier Classes" genannt.
+2. Dekonstruierbares Interface: Auch ein Interface kann sichtbaren Zustand beschreiben, die Implementierung bleibt gekapselt.
+3. Pattern Assignment: Der Compiler kennt den statischen Typ, deshalb ist keine Fallunterscheidung nötig. Das Pattern ist nur noch Dekonstruktion.
+4. Patterns im for-each: Das Element wird direkt im Schleifenkopf zerlegt.
+-->
+
+---
+
+# Ausblick: Rekonstruktion <span class="badge">Syntax nicht final</span>
+
+<div class="codewrap code-sm" style="position:relative">
+
+```java
+class Infusion(int speed, int duration) {
+    public Infusion {
+        if (speed <= 0)
+            throw new IllegalArgumentException();
+    }
+}
+
+var slower = infusion with { speed = speed / 2; };
+
+
+String json = serializer.write(infusion);
+
+
+Infusion back = serializer.read(json);
+```
+
+<Callout v-click :line="2" :col="22" title="Kanonischer Konstruktor" text="Hier liegen die Invarianten" />
+<Callout v-click :line="8" :col="52" title="with-Ausdruck" text="Kopie, Original bleibt" />
+<Callout v-click :line="11" :col="42" title="Serialisierung" text="Zustand ohne Reflection" />
+<Callout v-click :line="14" :col="39" title="Deserialisierung" text="Ruft den Konstruktor auf" />
+
+</div>
+
+<!--
+Alles hier sind Designrichtungen aus Project Amber, die Syntax ist nicht final.
+Dekonstruktion und Rekonstruktion nutzen dieselbe State Description.
+1. Kanonischer Konstruktor: Er ist der einzige Weg, ein Objekt zu bauen, und prüft die Invarianten.
+2. with-Ausdruck (JEP 468 für Records, später auch für Klassen): Komponenten werden im Block implizit verfügbar, es entsteht eine neue Instanz, das Original bleibt unverändert.
+3. Serialisierung: Ein Serializer nutzt die State Description. Kein Zugriff auf private Felder per Reflection, kein Umgehen der Kapselung.
+4. Deserialisierung: Beim Einlesen wird ein normaler Konstruktor aufgerufen. Dadurch bleiben die Invarianten der Klasse erhalten.
+Nicht behaupten: Java bekommt Companion Classes für Serialisierung. Besser: Deconstruction und Reconstruction könnten die Grundlage für bessere, kapselungsschonende Serialisierungs-APIs sein.
 -->
 
 ---
@@ -1126,13 +1230,6 @@ image: /embarc/s7-1--3x0.png
 ---
 layout: spicker
 ---
-
----
-layout: closing
-image: /embarc/s9-4-462x-47.png
----
-
-# Feedback & Fragen?
 
 ---
 layout: thanks

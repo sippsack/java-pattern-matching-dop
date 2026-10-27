@@ -3,7 +3,7 @@
     <h1>Teil der Java Community</h1>
     <img class="abs" src="/embarc/s4-1-105x140.png" style="left:105px;top:140px;width:274px" alt="JUG Darmstadt" />
     <img class="abs" src="/embarc/s4-2-445x156.png" style="left:445px;top:156px;width:479px" alt="Cyberland" />
-    <div class="abs note" style="left:300px;top:92px">Nächster Termin<br />am <b>TODO</b></div>
+    <div class="abs note" style="left:300px;top:92px">Nächster Termin<br />am <b>29.10.2026</b></div>
     <div class="abs note" style="left:674px;top:84px">monatliche Opensource<br />Code Camps</div>
     <div class="abs note" style="left:576px;top:428px">cyberland.ijug.eu</div>
     <div class="abs note" style="left:151px;top:457px">jug-da.de</div>
