@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { resolveAssetUrl } from '@slidev/client/layoutHelper.ts'
+
 defineProps<{ image?: string; number?: string }>()
 </script>
 
 <template>
   <div class="slidev-layout embarc-dark section">
     <div v-if="image" class="oval"></div>
-    <img v-if="image" class="oval-img" :src="image" alt="" />
+    <img v-if="image" class="oval-img" :src="resolveAssetUrl(image)" alt="" />
     <div class="title-box">
       <div v-if="number" class="num"><span>{{ number }}</span></div>
       <slot />

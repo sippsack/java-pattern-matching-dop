@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { resolveAssetUrl } from '@slidev/client/layoutHelper.ts'
+
 defineProps<{ image?: string }>()
 </script>
 
@@ -6,7 +8,7 @@ defineProps<{ image?: string }>()
   <div class="slidev-layout closing">
     <div class="left"></div>
     <div class="right"></div>
-    <img v-if="image" class="mascot" :src="image" alt="" />
+    <img v-if="image" class="mascot" :src="resolveAssetUrl(image)" alt="" />
     <div class="text"><slot /></div>
   </div>
 </template>
