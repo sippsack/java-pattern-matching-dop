@@ -41,6 +41,19 @@ layout: community
 ---
 
 ---
+class: community-maps-slide
+---
+
+<CommunityMaps />
+
+<!--
+Links: die Standorte der Java User Groups im iJUG.
+Per Klick rechts: dieselbe Region mit den Gruppen, bei denen ich schon zu Gast war, in Rot.
+Die Nummerierung stammt aus den jeweiligen Karten und ist nicht identisch.
+Konferenztourist und JUG-süchtig: Die Community lebt vom persönlichen Austausch vor Ort.
+-->
+
+---
 
 # Agenda
 
@@ -102,12 +115,11 @@ sandbox: 01-Medikationsplan
 
 <JavaSandboxCode v-click :inert="$clicks < 1 || undefined" />
 
-<p v-click class="small">Modernes Java: <b>Records</b>, <b>Sealed Types</b>, ...</p>
-
 <div class="medication-model-morph model-thumbnail"><ModelDiagram :animated="false" /></div>
 
 <!--
 Das ganze Diagramm als Java-Code. Nicht jedes Schlüsselwort erklären: wir nehmen die Teile gleich einzeln auseinander.
+Modernes Java: Records, Sealed Types, ...
 Der Code spiegelt das Diagramm fast 1:1. Beim Folienwechsel schrumpft das Diagramm nach rechts unten.
 Erster Klick: Code einblenden. Über ▶ die lokale JShell öffnen und das Beispiel ausführen.
 -->
@@ -120,13 +132,15 @@ Erster Klick: Code einblenden. Über ▶ die lokale JShell öffnen und das Beisp
 <a class="inspiration-screenshot" href="https://funktionale-programmierung.de/2024/11/25/sums-products.html" target="_blank" rel="noopener noreferrer">
   <img src="/sources/sums-products.png" alt="Screenshot des Blogartikels Datenmodellierung mit Summen und Produkten von Michael Sperber und Stefan Wehr" />
 </a>
-<div>
-
-## Datenmodellierung mit Summen und Produkten
-
-<p class="small">Michael Sperber und Stefan Wehr · November 2024</p>
-
-<p class="small" style="margin-top:20px"><b>Produkte</b> (<i>und</i>) und <b>Summen</b> (<i>oder</i>): die zwei Grundwerkzeuge für gute Datenmodelle.</p>
+<div class="inspiration-concepts">
+<div v-click class="inspiration-concept">
+  <span class="inspiration-symbol inspiration-product" aria-hidden="true">×</span>
+  <p><b>Produkte</b><br />sind <strong>„Und“-Daten</strong><small>z. B. Records</small></p>
+</div>
+<div v-click class="inspiration-concept">
+  <span class="inspiration-symbol inspiration-sum" aria-hidden="true">+</span>
+  <p><b>Summen</b><br />sind <strong>„Oder“-Daten</strong><small>z. B. Sealed Classes</small></p>
+</div>
 </div>
 </div>
 
@@ -150,29 +164,102 @@ Erster Klick: Code einblenden. Über ▶ die lokale JShell öffnen und das Beisp
   display: block;
   width: 100%;
 }
-.inspiration h2 {
+.inspiration-concepts {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  text-align: center;
+}
+.inspiration-concept {
+  width: 100%;
+}
+.inspiration-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font: 600 34px/1 'Rajdhani', sans-serif;
+  color: var(--ink);
+}
+.inspiration-product { background: #46afe2; }
+.inspiration-sum { background: var(--yellow); }
+.inspiration-concept p {
+  margin: 6px 0 0;
   font-size: 30px;
+  line-height: 1.15;
+}
+.inspiration-concept strong {
+  font-weight: 600;
+}
+.inspiration-concept small {
+  display: block;
+  margin-top: 5px;
+  font-size: 22px;
+  color: var(--muted);
 }
 </style>
 
 <!--
 Screenshot der deutschen Fassung des verlinkten Blogartikels, aufgenommen am 28.10.2026.
 Genau das, was im Diagramm blau (Produkt) und gelb (Summe) eingefärbt ist.
+Produkte und Summen sind die zwei Grundwerkzeuge für gute Datenmodelle.
 -->
 
 ---
 
 # Data-Oriented Programming
 
-<v-clicks>
+<div class="dop-principles">
+  <div v-click class="dop-principle">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="14" y="10" width="36" height="44" rx="5" /><path d="M23 23h18M23 32h18M23 41h12" /></svg>
+    <h2>Daten zuerst</h2>
+    <p>Präzise &amp; unveränderlich</p>
+  </div>
+  <div v-click class="dop-principle">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path d="m22 18-14 14 14 14M42 18l14 14-14 14M37 12 27 52" /></svg>
+    <h2>Operationen separat</h2>
+    <p>Daten → Daten</p>
+  </div>
+  <div v-click class="dop-principle">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="23" width="14" height="18" rx="3" /><rect x="46" y="23" width="14" height="18" rx="3" /><path d="M18 32h28m-8-8 8 8-8 8" /></svg>
+    <h2>Programme als Fluss</h2>
+    <p>Rein → Verarbeiten → Raus</p>
+  </div>
+</div>
 
-- **Daten** zuerst: präzise, unveränderlich, transparent modellieren
-- **Operationen** danach: getrennte Funktionen von Daten zu Daten
-- **Programme** als Produktionsstraße: Daten fließen rein, werden transformiert und fließen wieder raus
-
-</v-clicks>
+<style>
+.dop-principles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  align-items: center;
+  min-height: 300px;
+  text-align: center;
+}
+.dop-principle svg {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 24px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.dop-principle h2 { font-size: 30px; }
+.dop-principle p { margin-top: 12px; font-size: 23px; color: var(--muted); }
+</style>
 
 <!--
+Daten zuerst: präzise, unveränderlich, transparent modellieren.
+Operationen danach: getrennte Funktionen von Daten zu Daten.
+Programme als Produktionsstraße: Daten fließen rein, werden transformiert und fließen wieder raus.
+
 Das ist die Idee hinter dem Beispiel. Daten sind nur Daten, die Operationen leben neben den Typen, nicht darin.
 Funktioniert am besten in kleineren (Teil-)Systemen, die Eingaben in Ausgaben umwandeln: Batch, Event Processing, Analyse/Transformation von Strukturen.
 Wann DOP sinnvoll ist und welche Leitlinien dahinterstehen, kommt nach den Sprachfeatures.
@@ -182,15 +269,72 @@ Wann DOP sinnvoll ist und welche Leitlinien dahinterstehen, kommt nach den Sprac
 
 # Javas Werkzeugkasten für DOP
 
-<div class="grid-3" style="margin-top:30px">
-  <div v-click class="card"><h2>Records</h2><p class="small">Daten als Daten (Produkttypen)</p><p class="tiny muted"><code>Tablet</code>, <code>Infusion</code>, <code>Medication</code></p></div>
-  <div v-click class="card yellow"><h2>Sealed Types</h2><p class="small">Alternativen (Summentypen)</p><p class="tiny muted"><code>Dosage</code></p></div>
-  <div v-click class="card teal"><h2>Pattern Matching</h2><p class="small">Operationen auf Daten</p><p class="tiny muted"><code>describe(Dosage)</code></p></div>
+<div class="grid-3 dop-toolbox">
+  <div v-click class="card">
+    <span class="toolbox-symbol" aria-hidden="true">×</span>
+    <h2>Records</h2>
+    <p class="small">Daten als Daten<br />(Produkttypen)</p>
+    <p class="toolbox-examples"><code>Tablet</code>, <code>Infusion</code><br /><code>Medication</code></p>
+  </div>
+  <div v-click class="card yellow">
+    <span class="toolbox-symbol" aria-hidden="true">+</span>
+    <h2>Sealed Types</h2>
+    <p class="small">Alternativen<br />(Summentypen)</p>
+    <p class="toolbox-examples"><code>Dosage</code></p>
+  </div>
+  <div v-click class="card teal">
+    <svg class="toolbox-symbol" viewBox="0 0 64 64" aria-hidden="true"><path d="m22 18-14 14 14 14M42 18l14 14-14 14M37 12 27 52" /></svg>
+    <h2>Pattern Matching</h2>
+    <p class="small">Operationen<br />auf Daten</p>
+    <p class="toolbox-examples"><code>describe(Dosage)</code></p>
+  </div>
 </div>
 
-<p v-click class="center" style="margin-top:30px">Schauen wir sie uns einzeln an.</p>
+<style>
+.dop-toolbox {
+  min-height: 320px;
+  align-items: center;
+}
+.dop-toolbox .card {
+  box-sizing: border-box;
+  height: 260px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.dop-toolbox .toolbox-symbol {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  box-sizing: content-box;
+  padding: 5px 12px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 45%);
+  font: 600 42px/1 'Rajdhani', sans-serif;
+}
+.dop-toolbox svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.dop-toolbox h2 { font-size: 30px; margin: 0; }
+.dop-toolbox .small { font-size: 23px; line-height: 1.25; margin: 10px 0 0; }
+.dop-toolbox .toolbox-examples {
+  margin: 16px 0 0;
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--muted);
+}
+</style>
 
 <!--
+Schauen wir sie uns einzeln an.
 Jedes Feature ist einzeln nützlich, zusammen verändern sie, wie wir Daten modellieren und verarbeiten.
 Records + Sealed Types = was funktionale Sprachen algebraische Datentypen nennen (gleich mehr).
 Vorgehen: erst die kleinen Features (Switch Expressions, Records, Type Patterns, Sealed Types), dann Pattern Matching obendrauf, dann die Frage, wie sich das Design verändert.
@@ -200,34 +344,37 @@ Vorgehen: erst die kleinen Features (Switch Expressions, Records, Type Patterns,
 
 # Das Problem
 
-<div class="grid-2" style="margin-top:10px">
-<div>
+<table class="dop-problems">
+<thead>
+  <tr><th>Klassische Fallunterscheidung</th><th>Ein Modell für alles</th></tr>
+</thead>
+<tbody>
+  <tr>
+    <td>
+      <ul>
+        <li v-click><code>if</code>-<code>else</code>-Ketten mit <code>instanceof</code> und Casts</li>
+        <li v-click><code>switch</code> mit <code>break</code>, Fall-through und <code>default</code></li>
+        <li v-click>Neue Fälle fallen niemandem auf</li>
+      </ul>
+    </td>
+    <td>
+      <ul>
+        <li v-click>Ein Typ mit vielen optionalen Feldern</li>
+        <li v-click>Ungültige Zustände sind darstellbar</li>
+        <li v-click>Fehler zeigen sich erst <b>zur Laufzeit</b></li>
+      </ul>
+    </td>
+  </tr>
+</tbody>
+</table>
 
-## Klassische Fallunterscheidung
-
-<v-clicks>
-
-- `if`-`else`-Ketten mit `instanceof` und Casts
-- `switch` mit `break`, Fall-through und `default`
-- Neue Fälle fallen niemandem auf
-
-</v-clicks>
-
-</div>
-<div>
-
-## Ein Modell für alles
-
-<v-clicks>
-
-- Ein Typ mit vielen optionalen Feldern
-- Ungültige Zustände sind darstellbar
-- Fehler zeigen sich erst **zur Laufzeit**
-
-</v-clicks>
-
-</div>
-</div>
+<style>
+.dop-problems { table-layout: fixed; }
+.dop-problems th { width: 50%; }
+.dop-problems td { vertical-align: top; }
+.dop-problems ul { margin: 0; padding-left: 24px; }
+.dop-problems li { margin: 14px 0; line-height: 1.4; }
+</style>
 
 <!--
 Bei komplexeren Modellen werden klassische Fallunterscheidungen schnell unübersichtlich, und ungültige Zustände werden oft erst spät zur Laufzeit sichtbar.
@@ -236,47 +383,309 @@ Ziel: Unterschiede zwischen Daten explizit machen, Verarbeitung klarer und robus
 
 ---
 
-# Algebraische Datentypen
+# Produkte: dies und das
 
-<table>
-<thead><tr><th>Produkttypen: <i>dies und das</i></th><th>Summentypen: <i>dies oder das</i></th></tr></thead>
-<tbody>
-<tr><td><code>Tablet</code> = <code>int</code> &amp; <code>int</code> &amp; <code>int</code></td><td><code>Dosage</code> = <code>Tablet</code> | <code>Infusion</code></td></tr>
-<tr><td><code>Medication</code> = <code>Drug</code> &amp; <code>Dosage</code></td><td><code>Drug</code> = <code>PARACETAMOL</code> | ...</td></tr>
-<tr><td><b>Records</b></td><td><b>Sealed Types</b> und <b>Enums</b></td></tr>
-</tbody>
-</table>
+<div class="adt-equation">
+  <span class="adt-node adt-product">Medication</span>
+  <span>=</span>
+  <span v-click class="adt-equation-part"><span class="adt-node adt-sum">Drug</span><b>×</b><span class="adt-node adt-sum">Dosage</span></span>
+</div>
 
-<p v-click class="card yellow center" style="margin-top:30px"><b>Records + Sealed Types = algebraische Datentypen</b></p>
+<div v-click class="adt-product-example">
+<div class="adt-combinations">
+  <span></span><b>Tablet 1 0 1</b><b>Infusion 50 30</b>
+  <b>Paracetamol</b><span>●</span><span>●</span>
+  <b>Ibuprofen</b><span>●</span><span>●</span>
+  <b>Caffeine</b><span>●</span><span>●</span>
+</div>
+<div class="adt-count"><b>3 × 2 = 6</b><span>Kombinationen</span><small>Vereinfachte Auswahl</small></div>
+</div>
+
+<div v-click class="adt-haskell">
+
+```haskell
+data Medication = Medication Drug Dosage
+```
+
+<img class="haskell-logo" src="/sources/haskell-logo.svg" alt="Haskell" />
+
+</div>
 
 <!--
-Das Diagramm besteht nur aus zwei Bausteinen:
-- Produkt: ein Wert besteht aus allen seinen Komponenten gleichzeitig (Aggregation).
-- Summe: ein Wert ist genau eine von festen Alternativen (Auswahl).
-Beides kombiniert modelliert fast alles. Haskell, Scala, Kotlin nennen das ADTs. Java hat jetzt beide Hälften plus Pattern Matching zum Zerlegen.
-Goetz: Diese einfache Kombination aus Aggregation und Auswahl ist trügerisch mächtig. Kurz halten, es geht um den Namen.
+## Einstieg – nur Medication sichtbar
+
+Wir haben gerade Records und Sealed Types als Werkzeuge gesehen. Jetzt schauen wir auf die Idee dahinter.
+Was brauchen wir, um eine Medikation zu beschreiben?
+
+## Klick 1 – Drug × Dosage
+
+Einen Wirkstoff UND eine Dosierung. Beides gehört gleichzeitig zu einer Medikation.
+Zum Beispiel: Ibuprofen und eine Tablettendosierung morgens und abends.
+Genau dieses Zusammenfassen nennen wir einen Produkttyp.
+
+## Klick 2 – Raster und 3 × 2 = 6
+
+Warum ausgerechnet Produkt? Nehmen wir unsere drei Wirkstoffe und beschränken uns
+für einen Moment auf diese zwei konkreten Dosierungen. Jeden Wirkstoff können wir
+mit jeder Dosierung kombinieren. Drei mal zwei ergibt sechs mögliche Kombinationen.
+
+Das ist nur eine vereinfachte Auswahl, keine medizinische Aussage.
+Entscheidend ist: Bei Und-Daten multiplizieren sich die Möglichkeiten.
+
+Eine Zeile des Rasters mit dem Finger verfolgen: ein Wirkstoff, zwei Kombinationen.
+Das Raster zeigt nicht sämtliche Werte unseres echten Dosage-Typs.
+
+## Klick 3 – Haskell-Code
+
+In Haskell lässt sich das sehr knapp hinschreiben. Keine Sorge, wir lernen jetzt nicht Haskell.
+Hier steht einfach: Eine Medication enthält einen Drug und eine Dosage.
+In Java haben wir dafür unseren Record.
+
+Bei Bedarf: Links vom Gleichheitszeichen steht der Typname; rechts der gleichnamige
+Konstruktor mit seinen Komponenten. Die Komponenten stehen nebeneinander.
+
+## Übergang
+
+Das erklärt das Und. Aber eine Dosierung kann unterschiedliche Formen haben.
+Damit kommen wir zum Oder.
+-->
+
+---
+
+# Summen: dies oder das
+
+<div class="adt-equation">
+  <span class="adt-node adt-sum">Dosage</span>
+  <span>=</span>
+  <span v-click class="adt-equation-part"><span class="adt-node adt-product">Tablet</span><b>+</b><span class="adt-node adt-product">Infusion</span></span>
+</div>
+
+<div class="adt-alternatives">
+  <div v-click class="adt-alternative"><svg class="adt-choice" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" /><text x="20" y="21">1</text></svg><code>Tablet 1 0 1</code></div>
+  <b v-click="3">oder</b>
+  <div v-click="3" class="adt-alternative"><svg class="adt-choice" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17" /><text x="20" y="21">2</text></svg><code>Infusion 50 30</code></div>
+</div>
+
+<div v-click="4" class="adt-haskell adt-haskell-centered">
+
+```haskell
+data Dosage
+  = Tablet Int Int Int
+  | Infusion Int Int
+```
+
+<img class="haskell-logo" src="/sources/haskell-logo.svg" alt="Haskell" />
+
+</div>
+
+<!--
+## Einstieg – nur Dosage sichtbar
+
+Was kann eine Dosierung in unserem Modell sein?
+
+## Klick 1 – Tablet + Infusion
+
+Entweder eine Tablettendosierung ODER eine Infusion.
+Ein einzelner Wert wählt eine dieser Alternativen. Er ist nicht beides gleichzeitig.
+
+## Klick 2 – konkreter Tablet-Wert
+
+Hier ist die erste Form: eine Tablette morgens, keine mittags, eine abends.
+
+## Klick 3 – konkreter Infusion-Wert
+
+Und hier die andere Form: eine Infusion mit Geschwindigkeit und Dauer.
+Andere Form, andere Bestandteile – aber beides ist eine Dosage.
+
+Warum Summe? Wir nehmen alle möglichen Tablettendosierungen PLUS alle möglichen
+Infusionsdosierungen. Zusammen ergeben sie die möglichen Dosierungen.
+Der Typ sagt weiterhin eindeutig, welche Alternative vorliegt.
+Auch bei gleichen Zahlen bleiben die Alternativen durch ihre Konstruktoren unterscheidbar.
+
+## Klick 4 – Haskell-Code
+
+Der senkrechte Strich bedeutet hier Oder. Und innerhalb jeder Alternative sehen wir
+wieder Und: Eine Tablettendosierung hat drei Zahlen, eine Infusion zwei.
+
+In Java beschreiben wir diese geschlossene Auswahl mit einem Sealed Type und seinen Varianten.
+Ein Enum ist der einfache Fall: feste Alternativen ohne weitere Bestandteile.
+Int ist hier der Einfachheit halber der Haskell-Zahlentyp; es geht um die Struktur, nicht um Zahlenbereiche.
+
+## Übergang
+
+Jetzt haben wir beide Bausteine. Interessant wird es, wenn wir sie ineinanderstecken.
+-->
+
+---
+
+# Algebraische Datentypen
+
+<div class="adt-composition">
+<div class="adt-tree">
+  <div class="adt-node adt-product">Medication</div>
+  <div v-click class="adt-tree-level">
+    <svg class="adt-product-branches" viewBox="0 0 340 48" aria-hidden="true"><path d="M140 3 62 43m1-9-1 9 9 1M200 3l67 40m-9 0 9 0-1-9" /></svg>
+    <div><div class="adt-node adt-sum">Drug</div></div>
+    <b>×</b>
+    <div><div class="adt-node adt-sum">Dosage</div></div>
+  </div>
+  <div v-click class="adt-tree-variants">
+    <svg class="adt-branch" viewBox="0 0 340 40" aria-hidden="true"><path d="M267 0v12H165v23m102-23h22v23m-129-6 5 6 5-6m114 0 5 6 5-6" /></svg>
+    <span class="adt-node adt-product">Tablet</span><b>+</b><span class="adt-node adt-product">Infusion</span>
+  </div>
+</div>
+<div v-click="4" class="adt-haskell">
+
+```haskell
+data Drug
+  = Paracetamol | Ibuprofen | Caffeine
+
+data Dosage
+  = Tablet Int Int Int
+  | Infusion Int Int
+
+data Medication = Medication Drug Dosage
+```
+
+<img class="haskell-logo" src="/sources/haskell-logo.svg" alt="Haskell" />
+
+</div>
+</div>
+
+<p v-click="3" class="adt-takeaway"><b>Algebraische Datentypen sind zusammengesetzte Datentypen:</b><br />die Verbindung von <strong>Und-</strong> und <strong>Oder-Daten</strong>.</p>
+
+<!--
+## Einstieg – Medication
+
+Wir müssen dafür kein neues Beispiel erfinden. Unser Medikationsmodell macht das bereits.
+
+## Klick 1 – Drug × Dosage
+
+Oben steht das Und: Eine Medikation enthält einen Wirkstoff und eine Dosierung.
+
+## Klick 2 – Tablet + Infusion
+
+Eine Ebene darunter steckt das Oder: Die Dosierung ist eine Tablettendosierung
+oder eine Infusion. Und deren einzelne Felder bilden wieder Produkte.
+
+Wir kombinieren also nicht nur Werte, sondern auch die beiden Arten, Datentypen zu bauen.
+Auf den Dosage-Zweig zeigen: Die beiden unteren blauen Boxen gehören nur zu diesem Zweig.
+Drug ist ebenfalls eine Summe; seine Alternativen folgen im Code.
+
+## Klick 3 – Merksatz
+
+Algebraische Datentypen sind zusammengesetzte Datentypen: die Verbindung von Und- und Oder-Daten.
+In Java bauen wir sie mit Records, Sealed Types und Enums.
+
+## Klick 4 – vollständiger Haskell-Code mit Logo
+
+Rechts sehen wir unser Modell noch einmal kompakt: drei Wirkstoffalternativen,
+zwei Dosierungsformen und die Kombination aus Wirkstoff und Dosierung.
+Überall dieselben zwei Bausteine: nebeneinander für Und, senkrechter Strich für Oder.
+
+Diese Produkte und Summen geben den algebraischen Datentypen ihren Namen.
+Keine Haskell-Einführung: Konstruktoren erzeugen Werte und machen die Alternativen unterscheidbar.
+
+## Übergang zu Pattern Matching
+
+Damit können wir präzise beschreiben, welche Formen unsere Daten haben dürfen.
+Jetzt müssen wir diese Formen wieder erkennen und an ihre Bestandteile kommen.
+Genau dafür brauchen wir Pattern Matching.
 -->
 
 ---
 
 # Was ist Pattern Matching?
 
-<v-clicks>
+<div class="pattern-flow">
+  <div class="pattern-stage">
+    <span class="pattern-label">Wert</span>
+    <div class="adt-node adt-product">Infusion <b>50</b> <b>30</b></div>
+  </div>
+  <div v-click class="pattern-step">
+    <span class="pattern-arrow" aria-hidden="true">→</span>
+    <div class="pattern-stage">
+      <span class="pattern-label">Prüfen &amp; zerlegen</span>
+      <div class="adt-node adt-product">Infusion speed duration</div>
+      <div class="pattern-bindings"><span>speed = <b>50</b></span><span>duration = <b>30</b></span></div>
+    </div>
+  </div>
+  <div v-click class="pattern-step">
+    <span class="pattern-arrow" aria-hidden="true">→</span>
+    <div class="pattern-stage">
+      <span class="pattern-label">Weiterverwenden</span>
+      <div class="pattern-result">„50 ml/h for 30 min“</div>
+    </div>
+  </div>
+</div>
 
-- Werte **prüfen** *und* nach ihrer **Struktur zerlegen**
-- Gefundene Bestandteile direkt **weiterverwenden**
-- Compiler prüft **Vollständigkeit** (Exhaustiveness)
+<div v-click class="adt-haskell pattern-haskell">
 
-</v-clicks>
-
-```java
-case Infusion(int speed, int duration) ->
-    "%d ml/h for %d min".formatted(speed, duration);
+```haskell
+describe :: Dosage -> String
+describe (Tablet morning midday evening) =
+  "Tablets: " ++ show (morning, midday, evening)
+describe (Infusion speed duration) =
+  show speed ++ " ml/h for " ++ show duration ++ " min"
 ```
 
+<img class="haskell-logo" src="/sources/haskell-logo.svg" alt="Haskell" />
+
+</div>
+
+<style>
+.pattern-flow {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 12px 0 30px;
+}
+.pattern-stage { text-align: center; }
+.pattern-label { display: block; margin-bottom: 12px; font-size: 22px; color: var(--muted); }
+.pattern-step { display: flex; align-items: flex-start; gap: 12px; }
+.pattern-arrow { margin-top: 40px; font-size: 30px; }
+.pattern-flow .adt-node { padding: 12px; font-size: 23px; white-space: nowrap; }
+.pattern-bindings { display: flex; justify-content: center; gap: 16px; margin-top: 12px; font-size: 20px; }
+.pattern-bindings b { background: var(--yellow); border-radius: 4px; padding: 0 5px; }
+.pattern-result { padding: 12px; border-radius: 10px; background: var(--teal); font-size: 23px; white-space: nowrap; }
+.pattern-haskell { max-width: 720px; margin-inline: auto; }
+</style>
+
 <!--
-Pattern = Test + Extraktion. Statt zu fragen "was bist du?" und dann Komponenten per Getter zu holen, beschreibt das Pattern die erwartete Struktur.
-Das ist die Voraussetzung für datenorientierte Programmierung.
+## Einstieg – konkreter Wert
+
+Wir haben die möglichen Formen unserer Daten beschrieben. Jetzt drehen wir die Richtung um:
+Vor uns liegt ein konkreter Wert, Infusion 50 30. Wie kommen wir an seine Bestandteile?
+
+## Klick 1 – prüfen und zerlegen
+
+Das Muster Infusion speed duration prüft den Konstruktor: Ist der Wert eine Infusion?
+Wenn ja, werden seine beiden Bestandteile direkt an Namen gebunden:
+speed bekommt 50, duration bekommt 30.
+Pattern Matching verbindet also Test und Extraktion. Kein separater Cast, keine Getter-Kette.
+Die Namen im Muster sind neue Variablen, keine Vergleiche mit bereits vorhandenen Werten.
+
+## Klick 2 – weiterverwenden
+
+Die gebundenen Werte können wir unmittelbar verwenden, hier für eine Beschreibung.
+Aus 50 und 30 entsteht der Text „50 ml/h for 30 min“.
+
+## Klick 3 – Haskell-Code
+
+Die Signatur sagt: describe bildet eine Dosage auf einen String ab.
+Die beiden Funktionsgleichungen behandeln die zwei möglichen Formen:
+Tablet mit drei Bestandteilen und Infusion mit zwei.
+Haskell wählt die erste passende Gleichung. Die Infusion passt nicht zur Tablet-Zeile,
+sondern zur Infusion-Zeile. Deren Muster bindet speed und duration wie eben im Diagramm.
+show wandelt die Zahlen in Text um, ++ verbindet die Textteile.
+Das Tablet-Muster führt dasselbe Prinzip für die andere Variante vor.
+
+Beide Konstruktoren sind abgedeckt. GHC kann mit -Wincomplete-patterns vor fehlenden
+Fällen warnen; mit -Werror=incomplete-patterns werden diese Warnungen zu Fehlern.
+Nicht behaupten, dass Haskell unvollständige Muster grundsätzlich als Compilerfehler ablehnt.
+Diese Verbindung aus präzisem Datenmodell und passenden Operationen ist die Grundlage
+für datenorientierte Programmierung. Jetzt schauen wir auf Javas Werkzeuge dafür.
 -->
 
 ---
@@ -292,27 +701,16 @@ Von Switch Expressions bis Primitive Patterns
 
 ---
 class: code-xs compact-code
+sandbox: 02-KlassischerSwitch
+sandboxRun: |
+  categoryOld(Drug.PARACETAMOL);
+  categoryOld(Drug.IBUPROFEN);
+  categoryOld(Drug.CAFFEINE);
 ---
 
 # Der klassische `switch`
 
-```java
-String categoryOld(Drug drug) {
-    String category;
-    switch (drug) {
-        case PARACETAMOL:
-        case IBUPROFEN:
-            category = "painkiller";
-            break;
-        case CAFFEINE:
-            category = "stimulant";
-            break;
-        default:
-            category = "unknown";
-    }
-    return category;
-}
-```
+<JavaSandboxCode class="feature-sandbox-code" />
 
 <v-clicks>
 
@@ -328,23 +726,22 @@ Das vergessene break fällt stillschweigend durch. Und das default, das den Comp
 -->
 
 ---
+sandbox: 03-SwitchExpressions
+sandboxRun: |
+  category(Drug.PARACETAMOL);
+  category(Drug.IBUPROFEN);
+  category(Drug.CAFFEINE);
+---
 
 # Switch Expressions <span class="badge" style="background:var(--teal)">Java 14</span>
 
-```java
-String category(Drug drug) {
-    return switch (drug) {
-        case PARACETAMOL, IBUPROFEN -> "painkiller";
-        case CAFFEINE -> "stimulant";
-    };
-}
-```
+<JavaSandboxCode class="feature-sandbox-code" />
 
 <v-clicks>
 
 - Ein **Ausdruck**: liefert einen Wert
 - Kein Fall-through, kein `break`
-- Vollständig geprüft: kein `default` nötig ⇝ neues `Drug`? Compile-Fehler!
+- Vollständig geprüft: kein `default` nötig ⇝ neuer `Drug`-Typ führt zu Compiler Fehler (und das ist gut so!)
 
 </v-clicks>
 
@@ -355,19 +752,12 @@ Bei Enums prüft der Compiler Vollständigkeit ohne default. Wird Drug.ASPIRIN e
 -->
 
 ---
+sandbox: 04-Records
+---
 
 # Records: Data Carriers <span class="badge" style="background:var(--teal)">Java 16</span>
 
-```java
-var tablet = new Tablet(1, 0, 1);
-
-tablet.morning();                      // 1
-tablet.equals(new Tablet(1, 0, 1));    // true
-tablet.toString();   // Tablet[morning=1, midday=0, evening=1]
-
-// immutable: "changing" means creating a new one
-var withMidday = new Tablet(tablet.morning(), 1, tablet.evening());
-```
+<JavaSandboxCode class="feature-sandbox-code" />
 
 <v-clicks>
 
@@ -385,25 +775,19 @@ Records sind final und können Interfaces implementieren, aber nicht von Klassen
 
 ---
 class: code-xs
+sandbox: 05-Records
+sandboxRun: |
+  new Tablet(1, 0, 1);
+  var source = new ArrayList<Medication>();
+  var plan = new MedicationPlan("Erika Muster", source);
+  source.add(new Medication(Drug.IBUPROFEN, new Tablet(1, 0, 1)));
+  plan.medications(); // remains empty: defensive copy
+  new Tablet(-1, 0, 1); // IllegalArgumentException
 ---
 
 # Records: Validierung und Invarianten
 
-```java
-record Tablet(int morning, int midday, int evening) implements Dosage {
-    Tablet {
-        if (morning < 0 || midday < 0 || evening < 0)
-            throw new IllegalArgumentException("Counts must not be negative");
-    }
-}
-
-record MedicationPlan(String patientName, List<Medication> medications) {
-    MedicationPlan {
-        Objects.requireNonNull(patientName);
-        medications = List.copyOf(medications);
-    }
-}
-```
+<JavaSandboxCode class="feature-sandbox-code" />
 
 <v-clicks>
 
@@ -420,18 +804,12 @@ Kürzungskandidat: Infusion/Immutability nur mündlich erwähnen.
 -->
 
 ---
+sandbox: 06-Dosage
+---
 
 # Welche Dosierungen sind gültig?
 
-```java
-// Which of these combinations make sense?
-record Dosage(
-        Integer morning, Integer midday, Integer evening,
-        Integer speed, Integer duration) { }
-
-new Dosage(1, 0, 1, 5, 2);                  // tablets *and* infusion?
-new Dosage(null, null, null, null, null);   // nothing at all?
-```
+<JavaSandboxCode class="feature-sandbox-code" />
 
 <p v-click class="card pink center">Ein Typ für alles ⇝ ungültige Zustände sind <b>darstellbar</b></p>
 
@@ -441,14 +819,15 @@ Nichts verhindert beides oder nichts. Jede Operation muss diese Fälle prüfen. 
 -->
 
 ---
+sandbox: 07-SealedTypes
+sandboxRun: |
+  new Tablet(1, 0, 1);
+  new Infusion(50, 30);
+---
 
 # Sealed Types <span class="badge" style="background:var(--teal)">Java 17</span>
 
-```java
-sealed interface Dosage permits Tablet, Infusion { }
-record Tablet(int morning, int midday, int evening) implements Dosage { }
-record Infusion(int speed, int duration) implements Dosage { }
-```
+<JavaSandboxCode :variant="0" />
 
 <v-clicks>
 
@@ -466,6 +845,14 @@ Wie ein Interface mit zwei Implementierungen, aber der Compiler weiß, dass es k
 
 ---
 class: code-xs
+sandbox: 08-TypePatterns
+sandboxRuns:
+  - |
+      morningPillsOld(new Tablet(2, 0, 1));
+      morningPillsOld(new Infusion(50, 30));
+  - |
+      morningPills(new Tablet(2, 0, 1));
+      morningPills(new Infusion(50, 30));
 ---
 
 # Type Patterns: `instanceof` <span class="badge" style="background:var(--teal)">Java 16</span>
@@ -475,29 +862,14 @@ class: code-xs
 
 **Vorher**
 
-```java
-int morningPillsOld(Dosage dosage) {
-    if (dosage instanceof Tablet) {
-        Tablet tablet = (Tablet) dosage;
-        return tablet.morning();
-    }
-    return 0;
-}
-```
+<JavaSandboxCode :variant="0" />
 
 </div>
 <div>
 
 **Nachher**
 
-```java
-int morningPills(Dosage dosage) {
-    if (dosage instanceof Tablet tablet) {
-        return tablet.morning();
-    }
-    return 0;
-}
-```
+<JavaSandboxCode :variant="1" />
 
 </div>
 </div>
@@ -510,22 +882,16 @@ Eigenständiger Nutzen: weniger Boilerplate, kein Cast, der schiefgehen kann. "T
 -->
 
 ---
+sandbox: 09-Scope
+sandboxRun: |
+  hasMorningPills(new Tablet(1, 2, 0));
+  middayPills(new Tablet(1, 2, 0));
+  middayPills(new Infusion(50, 30));
+---
 
 # Type Patterns: Scope
 
-```java
-boolean hasMorningPills(Dosage dosage) {
-    return dosage instanceof Tablet t && t.morning() > 0;
-}
-
-int middayPills(Dosage dosage) {
-    if (!(dosage instanceof Tablet tablet)) {
-        return 0;
-    }
-    // `tablet` is in scope here
-    return tablet.midday();
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <p v-click class="small">Die Variable gilt dort, wo der Test <b>wahr</b> ist (Flow Scoping).</p>
 
@@ -535,19 +901,15 @@ Kürzungskandidat.
 -->
 
 ---
+sandbox: 10-PatternSwitch
+sandboxRun: |
+  describe(new Tablet(1, 0, 1));
+  describe(new Infusion(50, 30));
+---
 
 # Pattern Matching für `switch` <span class="badge" style="background:var(--teal)">Java 21</span>
 
-```java
-String describe(Dosage dosage) {
-    return switch (dosage) {
-        case Tablet tablet -> "%d-%d-%d tablets".formatted(
-                tablet.morning(), tablet.midday(), tablet.evening());
-        case Infusion infusion -> "%d ml/h for %d min".formatted(
-                infusion.speed(), infusion.duration());
-    };
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <v-clicks>
 
@@ -562,18 +924,12 @@ Mit dem sealed Dosage ist das eine Funktion über die Alternativen des Diagramms
 -->
 
 ---
+sandbox: 11-Exhaustiveness
+---
 
 # Exhaustiveness
 
-```java
-String describe(Dosage dosage) {
-    return switch (dosage) {
-        case Tablet tablet -> "%d-%d-%d tablets".formatted(
-                tablet.morning(), tablet.midday(), tablet.evening());
-        // error: does not cover all possible values
-    };
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <v-clicks>
 
@@ -590,19 +946,16 @@ Deshalb ist default auf sealed Types meist keine gute Idee.
 -->
 
 ---
+sandbox: 12-Guards
+sandboxRun: |
+  warn(new Tablet(4, 0, 0));
+  warn(new Infusion(150, 30));
+  warn(new Tablet(1, 0, 1));
+---
 
 # Guards (`when`)
 
-```java
-String warn(Dosage dosage) {
-    return switch (dosage) {
-        case Tablet t when t.morning() > 3 -> "Too many tablets";
-        case Tablet t -> "OK";
-        case Infusion i when i.speed() > 100 -> "Too fast";
-        case Infusion i -> "OK";
-    };
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <p v-click class="small"><code>case Type t when condition</code> ⇝ ein Pattern verfeinern</p>
 
@@ -613,14 +966,26 @@ spezifische Fälle mit Guard vor den allgemeinen. (Grenzwerte erfunden, keine me
 
 ---
 class: code-xs
+sandbox: 13-DominanceNull
+sandboxRuns:
+  - ""
+  - |
+      describeNullable(null);
+      describeNullable(new Tablet(1, 0, 1));
+  - |
+      describeAny(null);
+      describeAny(42);
+      describeAny("hello");
 ---
 
 # Dominance und `null`
 
-<div class="grid-2">
+<div class="grid-2 dominance-comparison">
 <div>
 
 **Allgemein vor speziell**
+
+<JavaSandboxCode :variant="0" excerpt>
 
 ```java
 switch (dosage) {
@@ -633,12 +998,16 @@ switch (dosage) {
 }
 ```
 
+</JavaSandboxCode>
+
 <p class="small" v-click>Reihenfolgefehler fallen auf.</p>
 
 </div>
 <div>
 
 **`null` im Switch**
+
+<JavaSandboxCode :variant="1" excerpt>
 
 ```java
 return switch (dosage) {
@@ -649,6 +1018,8 @@ return switch (dosage) {
 
 case null, default -> "something else";
 ```
+
+</JavaSandboxCode>
 
 <p class="small" v-click>Ohne <code>case null</code>: <code>NullPointerException</code></p>
 
@@ -663,19 +1034,15 @@ Kürzungskandidat: Dominance nur kurz erwähnen. Alles hier ist Teil von JEP 441
 -->
 
 ---
+sandbox: 14-RecordPatterns
+sandboxRun: |
+  format(new Tablet(1, 0, 1));
+  format(new Infusion(50, 30));
+---
 
 # Record Patterns <span class="badge" style="background:var(--teal)">Java 21</span>
 
-```java
-String format(Dosage dosage) {
-    return switch (dosage) {
-        case Tablet(int morning, int midday, int evening) ->
-            "%d-%d-%d tablets".formatted(morning, midday, evening);
-        case Infusion(int speed, int duration) ->
-            "%d ml/h for %d min".formatted(speed, duration);
-    };
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <v-clicks>
 
@@ -692,19 +1059,15 @@ Hier zahlen sich transparente Records aus. var kann die Komponententypen ersetze
 -->
 
 ---
+sandbox: 15-NestedPatterns
+sandboxRun: |
+  format(new Medication(Drug.IBUPROFEN, new Tablet(1, 0, 1)));
+  format(new Medication(Drug.CAFFEINE, new Infusion(50, 30)));
+---
 
 # Verschachtelte Record Patterns
 
-```java
-String format(Medication medication) {
-    return switch (medication) {
-        case Medication(var drug, Tablet(var morning, var midday, var evening))
-                -> "%s: %d-%d-%d".formatted(drug, morning, midday, evening);
-        case Medication(var drug, Infusion(var speed, var duration))
-                -> "%s: %d ml/h for %d min".formatted(drug, speed, duration);
-    };
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <v-clicks>
 
@@ -720,22 +1083,16 @@ Ein Pattern für List<Medication> gibt es nicht: für Collections Stream oder Sc
 -->
 
 ---
+sandbox: 16-NestedGuards
+sandboxRun: |
+  warn(new Medication(Drug.CAFFEINE, new Infusion(50, 30)));
+  warn(new Medication(Drug.IBUPROFEN, new Tablet(2, 1, 1)));
+  warn(new Medication(Drug.PARACETAMOL, new Tablet(1, 0, 1)));
+---
 
 # Verschachtelte Patterns und Guards
 
-```java
-String warn(Medication medication) {
-    return switch (medication) {
-        case Medication(var drug, Infusion(var speed, _))
-                when drug == Drug.CAFFEINE && speed > 10
-                -> "Caffeine: too fast";
-        case Medication(var drug, Tablet(var m, var d, var e))
-                when drug == Drug.IBUPROFEN && m + d + e > 3
-                -> "Ibuprofen: too many tablets";
-        case Medication _ -> "OK";
-    };
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <p v-click class="small">Erst die Form matchen, dann mit <code>when</code> verfeinern.</p>
 
@@ -745,12 +1102,20 @@ Form zuerst, Details danach: das Pattern wählt die Struktur, der Guard prüft d
 
 ---
 class: code-xs
+sandbox: 17-Unnamed
+sandboxRuns:
+  - |
+      morningPills(new Tablet(2, 0, 1));
+      morningPills(new Infusion(50, 30));
+  - ""
 ---
 
 # Unnamed Patterns und Variables <span class="badge" style="background:var(--teal)">Java 22</span>
 
 <div class="grid-2">
 <div>
+
+<JavaSandboxCode :variant="0" excerpt>
 
 ```java
 int morningPills(Dosage dosage) {
@@ -762,8 +1127,12 @@ int morningPills(Dosage dosage) {
 }
 ```
 
+</JavaSandboxCode>
+
 </div>
 <div>
+
+<JavaSandboxCode :variant="1" excerpt>
 
 ```java
 medication instanceof Medication(_, Tablet _)
@@ -774,6 +1143,8 @@ for (var _ : plan.medications()) {
     count++;
 }
 ```
+
+</JavaSandboxCode>
 
 </div>
 </div>
@@ -793,25 +1164,18 @@ _ ist nicht auf Record-Komponenten beschränkt: Type Pattern ohne Namen (Tablet 
 
 ---
 class: code-xs
+sandbox: 18-PrimitivePatterns
+sandboxRun: |
+  start(new Infusion(50, 30));
+  start(new Infusion(200, 30));
+sandboxNotice: "Benötigt ein JDK mit Primitive Patterns (z. B. JDK 27/28) und aktiviertes --enable-preview. Run startet das Beispiel; der letzte Aufruf demonstriert absichtlich einen Bereichsfehler."
 ---
 
 # Primitive Type Patterns
 
 <Preview />
 
-```java
-// the pump only accepts a byte
-void setPumpSpeed(byte speed) { /* ... */ }
-
-void start(Infusion infusion) {
-    if (infusion.speed() instanceof byte speed) {
-        setPumpSpeed(speed);
-    } else {
-        throw new IllegalArgumentException(
-                "Speed does not fit the pump: " + infusion.speed());
-    }
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <v-clicks>
 
@@ -828,21 +1192,21 @@ Status: Preview in JDK 27 (JEP 532, fünfte Preview), braucht --enable-preview. 
 -->
 
 ---
+sandbox: 19-PrimitiveRecords
+sandboxSetup: |
+  void setPumpSpeed(byte speed) { System.out.println("Pump speed: " + speed); }
+sandboxRun: |
+  start(new Infusion(50, 30));
+  start(new Tablet(1, 0, 1));
+  start(new Infusion(200, 30));
+sandboxNotice: "Benötigt ein JDK mit Primitive Patterns (z. B. JDK 27/28) und aktiviertes --enable-preview. Run startet das Beispiel; der letzte Aufruf demonstriert absichtlich einen Bereichsfehler."
+---
 
 # Primitive Patterns in Records
 
 <Preview />
 
-```java
-void start(Dosage dosage) {
-    switch (dosage) {
-        case Infusion(byte speed, _) -> setPumpSpeed(speed);
-        case Infusion _ -> throw new IllegalArgumentException(
-                "Speed does not fit the pump");
-        case Tablet _ -> { }
-    }
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <v-clicks>
 
@@ -948,18 +1312,15 @@ Und die schauen wir uns jetzt an: was passiert, wenn sich die Anforderungen änd
 -->
 
 ---
+sandbox: 20-Operation
+sandboxRun: |
+  dailyPills(new Tablet(1, 2, 1));
+  dailyPills(new Infusion(50, 30));
+---
 
 # Eine Operation ergänzen
 
-```java
-int dailyPills(Dosage dosage) {
-    return switch (dosage) {
-        case Tablet(var morning, var midday, var evening)
-                -> morning + midday + evening;
-        case Infusion _ -> 0;
-    };
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <v-clicks>
 
@@ -976,22 +1337,12 @@ Operationen, die nur ein Subsystem braucht, müssen die gemeinsamen Typen nicht 
 
 ---
 class: compact-code
+sandbox: 21-Alternative
 ---
 
 # Eine Alternative ergänzen
 
-```java
-sealed interface Dosage permits Tablet, Infusion, Patch { }
-record Patch(int changeEveryHours) implements Dosage { }
-
-String describe(Dosage dosage) {
-    return switch (dosage) {
-        case Tablet tablet -> "...";
-        case Infusion infusion -> "...";
-        // error: does not cover all possible values
-    };
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <v-clicks>
 
@@ -1162,26 +1513,15 @@ Quelle: future-of-pattern-matching-java-amber.md
 -->
 
 ---
+sandbox: 22-Ausblick
+sandboxNotice: "Syntaxentwurf: in aktuellen JDKs noch nicht verfügbar. Run zeigt erwartete Compilerfehler, nicht eine funktionierende Implementierung."
+---
 
 # Ausblick: Dekonstruktion überall <span class="badge">Syntax nicht final</span>
 
 <div class="codewrap code-sm" style="position:relative">
 
-```java
-class Infusion(int speed, int duration) {
-    private final Rate rate;
-}
-
-interface Medication(Drug drug, Dosage dosage) { }
-
-
-Medication(var drug, Infusion(var speed, _)) = med;
-
-
-for (Map.Entry(var drug, var dose) : plan.entrySet()) {
-    IO.println(drug + ": " + dose);
-}
-```
+<JavaSandboxCode :variant="0" />
 
 <Callout v-click :line="1" :col="42" title="Dekonstruierbare Klasse" text="State Description im Kopf" />
 <Callout v-click :line="5" :col="51" title="Dekonstruierbares Interface" text="Implementierung verborgen" />
@@ -1199,27 +1539,15 @@ Alles hier sind Designrichtungen aus Project Amber, die Syntax ist nicht final.
 -->
 
 ---
+sandbox: 23-Ausblick
+sandboxNotice: "Syntaxentwurf: in aktuellen JDKs noch nicht verfügbar. Run zeigt erwartete Compilerfehler, nicht eine funktionierende Implementierung."
+---
 
 # Ausblick: Rekonstruktion <span class="badge">Syntax nicht final</span>
 
 <div class="codewrap code-sm" style="position:relative">
 
-```java
-class Infusion(int speed, int duration) {
-    public Infusion {
-        if (speed <= 0)
-            throw new IllegalArgumentException();
-    }
-}
-
-var slower = infusion with { speed = speed / 2; };
-
-
-String json = serializer.write(infusion);
-
-
-Infusion back = serializer.read(json);
-```
+<JavaSandboxCode :variant="0" />
 
 <Callout v-click :line="2" :col="22" title="Kanonischer Konstruktor" text="Hier liegen die Invarianten" />
 <Callout v-click :line="8" :col="52" title="with-Ausdruck" text="Kopie, Original bleibt" />
@@ -1255,6 +1583,45 @@ layout: default
 ---
 layout: download
 ---
+
+---
+layout: default
+---
+
+# GitHub-Repos zum Vortrag
+
+<div class="talk-materials">
+  <div class="card">
+    <h2>Code-Demos</h2>
+    <a href="https://github.com/sippsack/java-dop-pattern-matching" target="_blank" rel="noopener noreferrer">github.com/sippsack/java-dop-pattern-matching</a>
+  </div>
+  <div class="card">
+    <h2>Folien · JUG Nürnberg · 28.10.2026</h2>
+    <p><a href="https://github.com/sippsack/java-pattern-matching-dop/tree/published/2026-10-28-jug-nuernberg/slides" target="_blank" rel="noopener noreferrer">sli.dev-Quellen auf GitHub · getaggter Stand</a></p>
+    <p><a href="https://www.sippsack.de/java-pattern-matching-dop/2026-10-28-jug-nuernberg/1" target="_blank" rel="noopener noreferrer">Folien online ansehen</a></p>
+  </div>
+</div>
+
+<style>
+.talk-materials {
+  display: grid;
+  gap: 24px;
+}
+.talk-materials .card {
+  padding: 18px 24px;
+}
+.talk-materials h2 {
+  margin-bottom: 12px;
+}
+.slidev-layout .talk-materials p {
+  margin-bottom: 6px;
+}
+</style>
+
+<!--
+Code-Demos: https://github.com/sippsack/java-dop-pattern-matching
+Die Folien verlinken auf den Veranstaltungsstand published/2026-10-28-jug-nuernberg.
+-->
 
 ---
 layout: full-image

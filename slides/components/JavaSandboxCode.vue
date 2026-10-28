@@ -7,7 +7,7 @@ import { resolveDemo } from '../sandbox/demos.mjs'
 import { sandboxState } from '../sandbox/sync'
 import { highlightJava } from '../sandbox/highlight'
 
-const props = withDefaults(defineProps<{ checkpoints?: string[] }>(), { checkpoints: () => [] })
+const props = withDefaults(defineProps<{ checkpoints?: string[]; variant?: number; excerpt?: boolean }>(), { checkpoints: () => [], variant: 0, excerpt: false })
 const { $frontmatter, $page } = useSlideContext()
 const { isPrintMode } = useNav()
 const files = import.meta.glob<string>('../demos/*.java', {
@@ -20,14 +20,26 @@ const demoCode = computed(() => demo.value && 'code' in demo.value ? demo.value.
 const demoError = computed(() => demo.value && 'error' in demo.value ? demo.value.error : '')
 const checkpoints = computed(() => demo.value && 'checkpoints' in demo.value
   ? demo.value.checkpoints : props.checkpoints)
-const setups = computed(() => demo.value && 'setups' in demo.value ? demo.value.setups : [])
+const setups = computed(() => {
+  const configured = demo.value && 'setups' in demo.value ? demo.value.setups : []
+  const extra = typeof $frontmatter.sandboxSetup === 'string' ? $frontmatter.sandboxSetup : ''
+  return Array.from({ length: checkpoints.value.length + 1 }, (_, index) =>
+    [configured?.[index], extra].filter(Boolean).join('\n'))
+})
 const labels = computed(() => demo.value && 'labels' in demo.value ? demo.value.labels : [])
+const sources = computed(() => [demoCode.value, ...checkpoints.value])
+const displayedCode = computed(() => sources.value[props.variant])
+const dialogSources = computed(() => sources.value.map((source, index) => {
+  const calls = Array.isArray($frontmatter.sandboxRuns)
+    ? $frontmatter.sandboxRuns[index] : $frontmatter.sandboxRun
+  return (source ?? '') + (typeof calls === 'string' && calls.trim() ? `\n\n${calls.trim()}` : '')
+}))
 
 const block = ref<HTMLElement>()
 const trigger = ref<HTMLButtonElement>()
 const panel = ref<HTMLElement>()
 const shared = sandboxState(String($page.value), demoCode.value)
-const { open } = toRefs(shared)
+const { open, entryVariant } = toRefs(shared)
 const code = ref('')
 const error = ref('')
 const highlighted = ref('')
@@ -35,7 +47,9 @@ const autoRun = ref(false)
 const { copied, copy } = useClipboard({ legacy: true })
 
 async function copyCode() {
-  const source = demoCode.value ?? block.value?.querySelector('pre code')?.textContent
+  const source = props.excerpt
+    ? block.value?.querySelector('pre code')?.textContent
+    : displayedCode.value ?? block.value?.querySelector('pre code')?.textContent
   if (source === undefined) {
     error.value = 'Kein Code zum Kopieren gefunden.'
     return
@@ -48,7 +62,7 @@ async function copyCode() {
   }
 }
 
-watch(demoCode, async (source, _, onCleanup) => {
+watch(displayedCode, async (source, _, onCleanup) => {
   let stale = false
   onCleanup(() => { stale = true })
   highlighted.value = ''
@@ -68,20 +82,22 @@ async function show() {
     error.value = 'Kein Codeblock gefunden. Einen Java-Codeblock in JavaSandboxCode einfügen.'
     return
   }
-  code.value = demoCode.value ?? (source.textContent?.replace(/\n$/, '') || '')
-  shared.code = code.value
-  shared.checkpoint = 0
-  shared.output = 'Bereit. Lokale JShell wird vorbereitet.'
+  code.value = demoCode.value === undefined
+    ? (source.textContent?.replace(/\n$/, '') || '') : dialogSources.value[0]
+  shared.code = demoCode.value === undefined ? code.value : dialogSources.value[props.variant]
+  shared.checkpoint = props.variant
+  entryVariant.value = props.variant
+  shared.output = $frontmatter.sandboxNotice || 'Bereit. Lokale JShell wird vorbereitet.'
   shared.runtime = ''
   shared.failed = false
-  autoRun.value = true
+  autoRun.value = !$frontmatter.sandboxNotice
   open.value = true
   await nextTick()
   panel.value?.querySelector<HTMLButtonElement>('button')?.focus()
 }
 
 watch(open, (visible) => {
-  if (visible) code.value = demoCode.value ?? shared.code
+  if (visible) code.value = demoCode.value === undefined ? shared.code : dialogSources.value[0]
   else autoRun.value = false
 })
 
@@ -118,8 +134,9 @@ function onKeydown(event: KeyboardEvent) {
   <div class="sandbox-code-example">
     <div ref="block" class="sandbox-code-block" :inert="open || undefined">
       <p v-if="demoError" role="alert">{{ demoError }}</p>
+      <slot v-else-if="excerpt" />
       <div v-else-if="highlighted" class="sandbox-highlighted" v-html="highlighted" />
-      <pre v-else-if="demoCode !== undefined"><code class="language-java">{{ demoCode }}</code></pre>
+      <pre v-else-if="displayedCode !== undefined"><code class="language-java">{{ displayedCode }}</code></pre>
       <slot v-else />
       <button
         v-if="!demoError && !isPrintMode"
@@ -153,7 +170,7 @@ function onKeydown(event: KeyboardEvent) {
       <p v-if="error" role="alert">{{ error }}</p>
     </div>
     <div
-      v-if="open && !isPrintMode"
+      v-if="open && (entryVariant ?? 0) === variant && !isPrintMode"
       class="sandbox-overlay"
       @click.self.stop="close"
     >
@@ -168,7 +185,7 @@ function onKeydown(event: KeyboardEvent) {
         @keyup.stop
         @click.stop
       >
-        <JavaSandbox :initial-code="code" :checkpoints="checkpoints" :setups="setups" :labels="labels" :auto-run="autoRun" fill>
+        <JavaSandbox :initial-code="code" :checkpoints="dialogSources.slice(1)" :setups="setups" :labels="labels" :notice="$frontmatter.sandboxNotice" :auto-run="autoRun" fill>
           <template #toolbar>
             <button aria-label="Sandbox schließen" title="Schließen (Esc)" @click="close">✕</button>
           </template>
@@ -181,12 +198,13 @@ function onKeydown(event: KeyboardEvent) {
 <style scoped>
 .sandbox-code-block { position: relative; }
 .sandbox-code-block :deep(pre) {
-  margin: 6px 0 12px; padding: 10px 82px 10px 16px;
+  margin: 6px 0 12px; padding: 10px 16px;
   border-left: 5px solid var(--yellow); border-radius: 6px;
-  font-family: var(--slidev-code-font-family); font-size: 15px; line-height: 1.45;
+  font-family: var(--slidev-code-font-family); font-size: var(--slidev-code-font-size, 15px); line-height: var(--slidev-code-line-height, 1.45);
   overflow-x: auto;
 }
 .sandbox-code-block :deep(code) { font: inherit; }
+.sandbox-code-block :deep(.slidev-code-copy) { display: none; }
 :global(.dark .sandbox-highlighted .shiki),
 :global(.dark .sandbox-highlighted .shiki span) {
   color: var(--shiki-dark) !important;
@@ -201,7 +219,7 @@ function onKeydown(event: KeyboardEvent) {
 .sandbox-code-copy svg { width: 100%; height: 100%; }
 .sandbox-code-play:focus-visible, .sandbox-code-copy:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 .sandbox-overlay {
-  position: absolute; inset: 0; z-index: 100;
+  position: fixed; inset: 0; z-index: 100;
   display: flex; align-items: center; justify-content: center;
   background: rgb(24 33 43 / 42%);
 }

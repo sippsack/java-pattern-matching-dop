@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, ref, toRefs, watch } from 'vue'
 import { useSlideContext } from '@slidev/client'
 import { sandboxState } from '../sandbox/sync'
 
-const props = withDefaults(defineProps<{ initialCode: string; checkpoints?: string[]; setups?: string[]; labels?: string[]; fill?: boolean; autoRun?: boolean }>(), {
+const props = withDefaults(defineProps<{ initialCode: string; checkpoints?: string[]; setups?: string[]; labels?: string[]; notice?: string; fill?: boolean; autoRun?: boolean }>(), {
   checkpoints: () => [],
   setups: () => [],
   labels: () => [],
@@ -47,7 +47,12 @@ function checkout(index: number) {
   if (loading.value || running.value) return
   checkpoint.value = index
   code.value = index === 0 ? props.initialCode : props.checkpoints[index - 1]
-  run()
+  if (props.notice) {
+    output.value = props.notice
+    failed.value = false
+    runtime.value = ''
+  }
+  else run()
 }
 
 onMounted(async () => {
@@ -153,6 +158,7 @@ async function run() {
       <pre role="status" aria-live="polite" :class="{ failed }">{{ output }}</pre>
     </div>
     <p class="sandbox-hint">
+      <span v-if="notice">{{ notice }} </span>
       <template v-if="provider">
         Run sendet Code an {{ provider.label }}. Nur öffentlichen Code verwenden.
         <template v-if="!local">Ausführung benötigt den lokalen Dev-Server.</template>

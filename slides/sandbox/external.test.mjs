@@ -80,4 +80,7 @@ test('dev.java encodes snippets and returns output and diagnostics', async () =>
   await assert.rejects(runDevJava('x', async () => new Response('', { status: 503 })), /HTTP 503/)
   await assert.rejects(runDevJava('x', async () => Response.json({ errorMessage: 'unavailable' })), /unavailable/)
   await assert.rejects(runDevJava('x', async () => Response.json({})), /Antwortformat/)
+  await assert.rejects(runDevJava('x', async () => Response.json({ body: [
+    { out: 'Error, unhandled state.', val: 'Unresolved dependencies: method helper()', exc: false, status: 'RECOVERABLE_DEFINED' },
+  ] })), /Vorwärtsreferenz/)
 })

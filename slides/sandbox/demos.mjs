@@ -35,7 +35,7 @@ export function resolveDemo(name, files) {
   const code = sources.map(source => source.replace(/^\/\/ @setup [^\r\n]+\r?\n/, ''))
   return {
     code: code[0], checkpoints: code.slice(1),
-    ...(setups.some(Boolean) ? {
+    ...(setups.some(Boolean) || steps.some(step => /^\d+-/.test(step.path.slice(prefix.length))) ? {
       setups,
       labels: steps.map(step => step.path.slice(prefix.length).replace(/^\d+-?/, '').replace(/\.java$/, '') || String(step.number)),
     } : {}),

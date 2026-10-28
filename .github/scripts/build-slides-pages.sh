@@ -43,7 +43,11 @@ while IFS= read -r tag; do
   echo "::group::Building $tag"
   source="$temporary/$version"
   mkdir -p "$source"
-  git archive "$tag" slides | tar -x -C "$source"
+  source_paths=(slides)
+  if [[ -n "$(git ls-tree "$tag" -- images)" ]]; then
+    source_paths+=(images)
+  fi
+  git archive "$tag" "${source_paths[@]}" | tar -x -C "$source"
   build_slides "$source/slides" "$base/$version" "$output/$version"
   echo "::endgroup::"
 done < "$temporary/tags"

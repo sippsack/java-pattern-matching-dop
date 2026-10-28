@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'slides/**'
+      - 'images/**'
       - '.github/workflows/slides-*.yml'
       - '.github/scripts/**'
   workflow_dispatch:

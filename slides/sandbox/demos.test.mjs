@@ -38,7 +38,10 @@ test('orders descriptive steps by number rather than description', () => {
     '../demos/02-ValueClasses-01-Identitaetsvergleich.java': 'one',
     '../demos/02-ValueClasses-02-ValueRecord.java': 'two',
     '../demos/02-ValueClasses-04-.java': 'ignore',
-  }), { code: 'one', checkpoints: ['two', 'three', 'ten'] })
+  }), {
+    code: 'one', checkpoints: ['two', 'three', 'ten'], setups: ['', '', '', ''],
+    labels: ['Identitaetsvergleich', 'ValueRecord', 'HasIdentity', 'Ende'],
+  })
 })
 
 test('rejects duplicate numbers even with different descriptions or legacy names', () => {

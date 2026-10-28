@@ -23,6 +23,10 @@ export async function runDevJava(code, fetcher = fetch, setup = '') {
     && typeof row.exc === 'boolean' && typeof row.status === 'string')) {
     throw new Error('Unerwartetes Antwortformat von dev.java. Die externe API könnte sich geändert haben.')
   }
+  const internalError = result.body.find(row => row.status === 'RECOVERABLE_DEFINED' && row.out === 'Error, unhandled state.')
+  if (internalError) {
+    throw new Error(`dev.java konnte eine Vorwärtsreferenz nicht verarbeiten: ${internalError.val}. Abhängigkeiten vor dem Beispiel deklarieren oder ein lokales JDK beziehungsweise Java Almanac wählen.`)
+  }
   return {
     ok: result.body.every(row => !row.exc && row.status !== 'REJECTED'),
     runtime: 'dev.java · Anbieter-JDK',

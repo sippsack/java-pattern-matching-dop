@@ -59,6 +59,33 @@ test('errors and unresolved declarations are explicit and sessions are isolated'
   assert.match(exception.output, /demo/)
 })
 
+test('feature slides 16 through 20 execute their file-backed code with hidden types and dialog-only calls', async () => {
+  const { readdir } = await import('node:fs/promises')
+  const files = {}
+  for (const name of await readdir(new URL('../demos/', import.meta.url)))
+    if (name.endsWith('.java'))
+      files[`../demos/${name}`] = await readFile(new URL(`../demos/${name}`, import.meta.url), 'utf8')
+  const slides = await readFile(new URL('../slides.md', import.meta.url), 'utf8')
+  const expectations = [
+    ['02-KlassischerSwitch', /"stimulant"/],
+    ['03-SwitchExpressions', /"stimulant"/],
+    ['04-Records', /Tablet\[morning=1, midday=1, evening=1\]/],
+    ['05-Records', /Counts must not be negative/],
+    ['06-Dosage', /morning=null, midday=null/],
+  ]
+  for (const [name, expected] of expectations) {
+    const demo = resolveDemo(name, files)
+    assert.ok('code' in demo, name)
+    const frontmatter = slides.slice(slides.indexOf(`sandbox: ${name}\n`)).split('\n---')[0]
+    const calls = frontmatter.match(/sandboxRun: \|\n((?:  .*(?:\n|$))*)/)?.[1] || ''
+    const result = await runJava(`${demo.code}\n${calls}`, undefined, false, demo.setups?.[0])
+    assert.equal(result.ok, name !== '05-Records', `${name}: ${result.output}`)
+    assert.match(result.output, expected, name)
+    if (name === '05-Records') assert.match(result.output, /=> \[\]/)
+    assert.doesNotMatch(result.output, /Drug deklariert/, name)
+  }
+})
+
 test('output escaping and the preview flag survive transport', async () => {
   const result = await runJava('System.err.println("Grüße");\nSystem.out.println("\\\"\\\\\\t");', undefined, false)
   assert.equal(result.ok, true)
@@ -67,6 +94,44 @@ test('output escaping and the preview flag survive transport', async () => {
   const flags = 'System.out.println(java.lang.management.ManagementFactory.getRuntimeMXBean().getInputArguments());'
   assert.doesNotMatch((await runJava(flags, undefined, false)).output, /--enable-preview/)
   assert.match((await runJava(flags, undefined, true)).output, /--enable-preview/)
+})
+
+test('all remaining Java demos execute each tab with their slide calls and expected failures', async () => {
+  const { readdir } = await import('node:fs/promises')
+  const files = {}
+  for (const name of await readdir(new URL('../demos/', import.meta.url)))
+    if (name.endsWith('.java'))
+      files[`../demos/${name}`] = await readFile(new URL(`../demos/${name}`, import.meta.url), 'utf8')
+  const slides = await readFile(new URL('../slides.md', import.meta.url), 'utf8')
+  const names = [...slides.matchAll(/^sandbox: ((?:0[7-9]|1\d|2[0-3])-[\w-]+)$/gm)].map(match => match[1])
+  assert.equal(names.length, 17)
+  let variants = 0
+  for (const name of names) {
+    const demo = resolveDemo(name, files)
+    assert.ok('code' in demo, name)
+    const frontmatter = slides.slice(slides.indexOf(`sandbox: ${name}\n`)).split('\n---')[0]
+    const single = frontmatter.match(/sandboxRun: \|\n((?:  .*(?:\n|$))*)/)?.[1] || ''
+    const extraSetup = frontmatter.match(/sandboxSetup: \|\n((?:  .*(?:\n|$))*)/)?.[1] || ''
+    const multiple = frontmatter.match(/sandboxRuns:\n([\s\S]*?)(?=^\S|(?![\s\S]))/m)?.[1]
+    const calls = multiple
+      ? [...multiple.matchAll(/^  - (?:\|\n((?:      .*(?:\n|$))*)|"")/gm)].map(match => match[1] || '')
+      : []
+    for (const [index, code] of [demo.code, ...demo.checkpoints].entries()) {
+      variants++
+      const setup = [demo.setups?.[index], extraSetup].filter(Boolean).join('\n')
+      const result = await runJava(`${code}\n${calls[index] ?? single}`, undefined, true, setup)
+      const failure = /^(11-|18-|19-|21-|22-|23-)/.test(name) || (name.startsWith('13-') && index === 0)
+      assert.equal(result.ok, !failure, `${name}/${index}: ${result.output}`)
+      if (/^(18-|19-)/.test(name)) {
+        assert.match(result.output, /Pump speed: 50/)
+        assert.match(result.output, /Speed does not fit the pump/)
+      }
+      if (name.startsWith('08-')) assert.match(result.output, /=> 2\n=> 0/)
+      if (name.startsWith('13-') && index === 1) assert.match(result.output, /no dosage/)
+      if (name.startsWith('17-') && index === 1) assert.match(result.output, /"swallow"/)
+    }
+  }
+  assert.equal(variants, 21)
 })
 
 test('timeouts and premature JVM exits do not produce success', async () => {

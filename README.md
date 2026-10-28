@@ -105,6 +105,27 @@ die Setup-Ausgaben werden anhand der Zeilenzuordnung ausgeblendet.
 Setup-Dateien müssen direkt unter `slides/demos/` liegen; verschachtelte
 `@setup`-Verweise sind nicht erlaubt. „Unsichtbar“ ist nur eine Anzeigeoption,
 keine Geheimhaltung: Externe Anbieter erhalten auch den Setup-Code.
+Die Feature-Folien zu klassischem Switch, Switch Expressions, Records und
+ungültigen Dosierungen verwenden ebenfalls dateibasierte Demos (`02` bis `06`).
+Optionales `sandboxRun: |` im Frontmatter ergänzt Testaufrufe ausschließlich
+im JShell-Editor, nicht im Foliencode oder in der Zwischenablage.
+Das Validierungsbeispiel endet absichtlich mit einer `IllegalArgumentException`
+für eine negative Tablettenanzahl.
+Alle weiteren Java-Codefolien sind ebenfalls angebunden (Demos `07` bis `23`).
+Nebeneinander gezeigte Beispiele öffnen mit `variant` den jeweiligen Reiter
+derselben Demo; es wird nur ein Dialog pro Folie geöffnet. `sandboxRuns` enthält
+bei Bedarf eine Liste von Testaufrufen in derselben Reihenfolge wie die Varianten.
+`sandboxSetup: |` kann zusätzliche unsichtbare Hilfsfunktionen vor dem sichtbaren
+Code bereitstellen, etwa `setPumpSpeed` für die Primitive Record Patterns.
+Bei verkürzten Syntaxausschnitten bleibt die Folienansicht über `excerpt` erhalten;
+im Dialog wird ein vollständiges Beispiel mit Kontext geladen.
+Exhaustiveness, Dominance und die neue Alternative demonstrieren bewusst
+Compilerfehler. Primitive Patterns benötigen ein passendes JDK und Preview;
+der letzte Aufruf zeigt jeweils den beabsichtigten Bereichsfehler.
+`sandboxNotice` kennzeichnet solche Voraussetzungen im Dialog und verhindert
+einen automatischen Start. Die beiden Ausblick-Beispiele sind nicht implementierte
+Syntaxentwürfe: Sie lassen sich im Editor untersuchen, aber Run liefert in
+aktuellen JDKs erwartete Compilerfehler.
 Vorwärtsreferenzen in der Sealed-Hierarchie werden erst nach dem Einlesen
 aller Deklarationen auf Vollständigkeit geprüft.
 

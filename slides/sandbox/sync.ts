@@ -9,6 +9,7 @@ interface SandboxState {
   failed: boolean
   preview: boolean
   open: boolean
+  entryVariant: number
 }
 
 const states = new Map<string, SandboxState>()
@@ -30,7 +31,7 @@ export function sandboxState(key: string, initialCode = '') {
   if (existing) return existing
   const state = reactive<SandboxState>(restored[key] ?? {
     code: initialCode, checkpoint: 0, output: 'Bereit. Ziel wählen und Run drücken.',
-    runtime: '', running: false, failed: false, preview: true, open: false,
+    runtime: '', running: false, failed: false, preview: true, open: false, entryVariant: 0,
   })
   states.set(key, state)
   const channel = new BroadcastChannel(`java-sandbox:${import.meta.env.BASE_URL}:${key}`)
