@@ -75,10 +75,12 @@ image: /duke/duke-shapes.png
 DOP, Pattern Matching, ADTs
 
 ---
+transition: view-transition
+---
 
 # Unser Beispiel: ein Medikationsplan
 
-<ModelDiagram />
+<div class="medication-model-morph"><ModelDiagram /></div>
 
 <p class="source tiny muted" style="bottom:10px">Alle Werte frei erfunden, keine medizinische Beratung.</p>
 
@@ -92,46 +94,70 @@ Blau = kombiniert mehrere Werte (Produkt), gelb = Auswahl zwischen Alternativen 
 -->
 
 ---
-
-# Inspiriert von
-
-<div class="card yellow" style="margin-top:20px">
-
-## Data Modeling with Sums and Products
-
-Michael Sperber und Stefan Wehr · funktionale-programmierung.de · November 2024
-
-</div>
-
-<p class="small" style="margin-top:20px"><b>Produkte</b> (<i>und</i>) und <b>Summen</b> (<i>oder</i>): die zwei Grundwerkzeuge für gute Datenmodelle.</p>
-
-<p class="source">https://funktionale-programmierung.de/en/2024/11/25/sums-products.html</p>
-
-<!--
-TODO: Screenshot des Blogposts ergänzen (im Devoxx-Deck: images/sums-products.png).
-Genau das, was im Diagramm blau (Produkt) und gelb (Summe) eingefärbt ist.
--->
-
+class: code-sm model-in-code
+sandbox: 01-Medikationsplan
 ---
 
 # Das Modell in Code
 
-```java {all}
-enum Drug { PARACETAMOL, IBUPROFEN, CAFFEINE }
-
-sealed interface Dosage permits Tablet, Infusion { }
-record Tablet(int morning, int midday, int evening) implements Dosage { }
-record Infusion(int speed, int duration) implements Dosage { }
-
-record Medication(Drug drug, Dosage dosage) { }
-record MedicationPlan(String patientName, List<Medication> medications) { }
-```
+<JavaSandboxCode v-click :inert="$clicks < 1 || undefined" />
 
 <p v-click class="small">Modernes Java: <b>Records</b>, <b>Sealed Types</b>, ...</p>
 
+<div class="medication-model-morph model-thumbnail"><ModelDiagram :animated="false" /></div>
+
 <!--
 Das ganze Diagramm als Java-Code. Nicht jedes Schlüsselwort erklären: wir nehmen die Teile gleich einzeln auseinander.
-Der Code spiegelt das Diagramm fast 1:1.
+Der Code spiegelt das Diagramm fast 1:1. Beim Folienwechsel schrumpft das Diagramm nach rechts unten.
+Erster Klick: Code einblenden. Über ▶ die lokale JShell öffnen und das Beispiel ausführen.
+-->
+
+---
+
+# Inspiriert von
+
+<div class="inspiration">
+<a class="inspiration-screenshot" href="https://funktionale-programmierung.de/2024/11/25/sums-products.html" target="_blank" rel="noopener noreferrer">
+  <img src="/sources/sums-products.png" alt="Screenshot des Blogartikels Datenmodellierung mit Summen und Produkten von Michael Sperber und Stefan Wehr" />
+</a>
+<div>
+
+## Datenmodellierung mit Summen und Produkten
+
+<p class="small">Michael Sperber und Stefan Wehr · November 2024</p>
+
+<p class="small" style="margin-top:20px"><b>Produkte</b> (<i>und</i>) und <b>Summen</b> (<i>oder</i>): die zwei Grundwerkzeuge für gute Datenmodelle.</p>
+</div>
+</div>
+
+<p class="source"><a href="https://funktionale-programmierung.de/2024/11/25/sums-products.html">https://funktionale-programmierung.de/2024/11/25/sums-products.html</a></p>
+
+<style>
+.inspiration {
+  display: grid;
+  grid-template-columns: 530px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.inspiration-screenshot {
+  display: block;
+  overflow: hidden;
+  border: 1px solid #ddd !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px #0002;
+}
+.inspiration-screenshot img {
+  display: block;
+  width: 100%;
+}
+.inspiration h2 {
+  font-size: 30px;
+}
+</style>
+
+<!--
+Screenshot der deutschen Fassung des verlinkten Blogartikels, aufgenommen am 28.10.2026.
+Genau das, was im Diagramm blau (Produkt) und gelb (Summe) eingefärbt ist.
 -->
 
 ---

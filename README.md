@@ -44,6 +44,91 @@ nach `slides/public/embarc/` übernommen; es gibt keine Laufzeitabhängigkeit
 von dessen Verzeichnis. Die veröffentlichte betterCode-Tag-Version bleibt
 von diesen Layoutänderungen unberührt.
 
+Beim Wechsel vom Klassendiagramm zu „Das Modell in Code“ wandert das Diagramm
+per View Transition verkleinert in die rechte untere Ecke. Die kleine Variante
+ist vollständig sichtbar; die große baut sich weiterhin schrittweise auf.
+Der Effekt funktioniert auch rückwärts in Browsern mit View-Transition-Unterstützung;
+andere Browser wechseln ohne Morph-Effekt. Bei reduzierten Bewegungen entfällt
+die lange Animation.
+
+## Java-Beispiele und lokale JShell
+
+Auf „Das Modell in Code“ erscheint der Codeblock mit dem ersten Klick,
+der Text darunter mit dem zweiten. Das kleine Diagramm ist sofort sichtbar.
+Die Schaltfläche **▶** am Codeblock öffnet die JShell-Ansicht und führt das
+Beispiel lokal aus. Links lässt sich der Code bearbeiten, rechts stehen Ausgabe
+und Compilerdiagnosen. **Run** oder **Strg/⌘ + Enter** führt den gesamten Inhalt
+in einer frischen JShell aus. **Esc** schließt die Ansicht.
+
+Die Integration übernimmt die Ausführungsbrücke und Bedienung aus dem
+`java-sandbox`-Prototyp des Valhalla-Vortrags.
+Sie benötigt ein lokales JDK ab Java 17 mit `jdk.jshell`. Beim Start von
+`npm run dev` werden die üblichen JDK-Verzeichnisse durchsucht; das höchste
+gefundene JDK ist vorausgewählt. Andere erkannte JDKs lassen sich im Dialog
+auswählen. Zusätzliche Installationen können über `JAVA_SANDBOX_HOME` oder
+`JAVA_SANDBOX_JDKS` (JSON-Array absoluter JDK-Home-Pfade) in `slides/.env.local`
+angegeben werden. Die erkannte Liste wird in dieser Git-ignorierten Datei
+gespeichert. `--enable-preview` ist wie im Prototyp umschaltbar, für dieses
+Modell aber nicht erforderlich.
+
+Die Zielauswahl enthält außerdem **dev.java** und **Java Almanac · JDK 28**.
+Die Auswahl allein sendet keinen Code. Erst **Run** überträgt den Editorinhalt
+über den lokalen Dev-Server zum gewählten Anbieter. Ausschließlich öffentlichen,
+nicht vertraulichen Code verwenden. dev.java aktiviert Preview fest; bei
+Java Almanac ist Preview umschaltbar. Java Almanac verwendet dieselbe
+JShell-Auswertung wie lokal, damit auch Records und Sealed-Hierarchien mit
+Vorwärtsreferenzen funktionieren.
+
+Wurde `vite.config.ts` bei bereits laufendem Slidev hinzugefügt, muss der
+Dev-Server einmal beendet und mit `npm run dev` neu gestartet werden.
+Eine fehlende Brücke (HTTP 404) ist keine fehlgeschlagene JDK-Erkennung;
+der Dialog zeigt in diesem Fall einen ausdrücklichen Neustarthinweis.
+
+Das Beispiel liegt in
+`slides/demos/01-Medikationsplan-01-Datenmodell.java` und wird über
+`sandbox: 01-Medikationsplan` im Folien-Frontmatter eingebunden.
+Die Datei ist die gemeinsame Quelle für Folie und Editor.
+Das Namensmuster lautet `<Demo-Nr>-<Thema>-<Varianten-Nr>-<Beschreibung>.java`.
+Es gibt die Reiter **Datenmodell** und **Beispieldaten**. Der zweite lädt
+`01-Medikationsplan-02-Beispieldaten.java` mit drei Medikamenten für einen Plan
+und gibt diese aus. Weitere nummerierte Dateien ergänzen die Auswahl automatisch.
+Ein Klick auf einen Reiter lädt dessen Originalcode und führt ihn neu aus.
+
+Die erste Zeile `// @setup 01-Medikationsplan-01-Datenmodell.java` im
+Beispieldaten-Snippet lädt die Typdefinitionen vor dem sichtbaren Code in dieselbe
+frische JShell. Der Verweis wird aus dem Editor entfernt; auch erfolgreiche
+Setup-Ausgaben werden nicht angezeigt. Setup-Fehler bleiben sichtbar.
+So ist der zweite Reiter unabhängig davon ausführbar, ob der erste zuvor
+gestartet wurde. Lokal und bei Java Almanac wird das Setup vor dem Beispiel
+vollständig geprüft. dev.java erhält beide Teile in einer Anfrage;
+die Setup-Ausgaben werden anhand der Zeilenzuordnung ausgeblendet.
+Setup-Dateien müssen direkt unter `slides/demos/` liegen; verschachtelte
+`@setup`-Verweise sind nicht erlaubt. „Unsichtbar“ ist nur eine Anzeigeoption,
+keine Geheimhaltung: Externe Anbieter erhalten auch den Setup-Code.
+Vorwärtsreferenzen in der Sealed-Hierarchie werden erst nach dem Einlesen
+aller Deklarationen auf Vollständigkeit geprüft.
+
+Die Brücke bindet nur an `127.0.0.1` und akzeptiert ausschließlich
+gleichursprüngliche lokale Anfragen. **Sie ist keine isolierte Sicherheits-Sandbox:**
+Java-Code läuft mit den Rechten des lokalen Benutzers. Nur vertrauenswürdigen
+Code ausführen und den Server nicht per Tunnel oder Netzwerk freigeben.
+Anfragen und Ausgaben sind größenbegrenzt; nach zehn Sekunden wird die
+Ausführungs-JVM beendet. Bei Auswahl eines lokalen JDKs wird kein Code an
+externe Dienste übertragen.
+
+Auf GitHub Pages bleibt der Code sichtbar und der Dialog zeigt einen expliziten
+Hinweis auf den nötigen lokalen Dev-Server; Run ist dort für alle Ziele deaktiviert.
+Die externen Anbieter bleiben auswählbar und über „Anbieter öffnen“ erreichbar.
+Build und PDF benötigen kein JDK. Im PDF bleiben nur die Codebeispiele, nicht
+die interaktiven Bedienelemente.
+
+Tests für Demoauflösung, JDK-Erkennung und lokale Ausführung:
+
+```sh
+cd slides
+npm run test:sandbox
+```
+
 ## GitHub Pages
 
 GitHub Pages ist im Repository unter **Settings → Pages → Source: GitHub Actions**

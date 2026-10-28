@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "slidev --open",
     "build": "slidev build",
-    "export": "slidev export --output pattern-matching-dop.pdf"
+    "export": "slidev export --output pattern-matching-dop.pdf",
+    "test:sandbox": "node --test sandbox/*.test.mjs"
   },
   "devDependencies": {
     "@fontsource/fira-code": "^5.3.0",

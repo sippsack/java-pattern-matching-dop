@@ -316,3 +316,25 @@ h1 .badge {
   font-size: 17px;
   color: var(--muted);
 }
+
+.medication-model-morph {
+  view-transition-name: medication-model;
+}
+
+.model-thumbnail {
+  position: absolute;
+  right: 57px;
+  bottom: 20px;
+  width: 300px;
+}
+
+::view-transition-group(medication-model) {
+  animation-duration: 800ms;
+  animation-timing-function: ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(medication-model) {
+    animation-duration: 1ms;
+  }
+}
