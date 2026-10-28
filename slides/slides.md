@@ -25,7 +25,7 @@ image: /duke/duke-shapes.png
 
 ::date::
 
-Oktober 2026 · betterCode Java
+28.10.2026 · JUG Nürnberg
 
 <!--
 Titelfolie. TODO: Event/Konferenz und Datum eintragen, ggf. Event-Logo ergänzen.
@@ -33,6 +33,7 @@ Titelfolie. TODO: Event/Konferenz und Datum eintragen, ggf. Event-Logo ergänzen
 
 ---
 layout: bio
+hide: true
 ---
 
 ---
@@ -65,6 +66,7 @@ heutiger Stand (Switch Expressions, Records, Sealed Classes, Type/Record/Unnamed
 ---
 layout: section
 number: '01'
+sidebar: false
 image: /duke/duke-shapes.png
 ---
 
@@ -242,7 +244,8 @@ Goetz: Diese einfache Kombination aus Aggregation und Auswahl ist trügerisch m�
 </v-clicks>
 
 ```java
-case Infusion(int speed, int duration) -> "%d ml/h for %d min".formatted(speed, duration);
+case Infusion(int speed, int duration) ->
+    "%d ml/h for %d min".formatted(speed, duration);
 ```
 
 <!--
@@ -253,6 +256,7 @@ Das ist die Voraussetzung für datenorientierte Programmierung.
 ---
 layout: section
 number: '02'
+sidebar: false
 image: /duke/duke-features.png
 ---
 
@@ -261,7 +265,7 @@ image: /duke/duke-features.png
 Von Switch Expressions bis Primitive Patterns
 
 ---
-class: code-xs
+class: code-xs compact-code
 ---
 
 # Der klassische `switch`
@@ -945,6 +949,8 @@ Operationen, die nur ein Subsystem braucht, müssen die gemeinsamen Typen nicht 
 -->
 
 ---
+class: compact-code
+---
 
 # Eine Alternative ergänzen
 
@@ -1062,6 +1068,7 @@ DOP braucht Pattern Matching für switch, also ist Java 21 das Minimum.
 ---
 layout: section
 number: '03'
+sidebar: false
 image: /duke/duke-live-coding.png
 ---
 
@@ -1096,6 +1103,7 @@ Jeder Schritt der Demo ist ein eigener Branch bzw. Stand, damit man später zu H
 ---
 layout: section
 number: '04'
+sidebar: false
 image: /duke/duke-binoculars.png
 ---
 
@@ -1224,11 +1232,13 @@ layout: download
 
 ---
 layout: full-image
+sidebar: false
 image: /embarc/s7-1--3x0.png
 ---
 
 ---
 layout: spicker
+sidebar: false
 ---
 
 ---

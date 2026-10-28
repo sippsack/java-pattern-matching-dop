@@ -45,7 +45,7 @@ body,
 
 /* ---------- Standard-Inhaltsfolie (Layout "Nur Titel" / "Titel und Inhalt") ---------- */
 .slidev-layout.embarc {
-  padding: 124px 57px 24px 57px;
+  padding: 150px 57px 24px 57px;
 }
 
 .slidev-layout.embarc h1 {
@@ -67,19 +67,39 @@ body,
 .slidev-layout.embarc::before {
   content: '';
   position: absolute;
-  left: 64px;
-  top: 96px;
+  left: 57px;
+  top: 110px;
   width: 157px;
   height: 7.5px;
   background: var(--yellow);
 }
 
-.slidev-layout.embarc .page-no {
+.slidev-layout.embarc-dark {
+  background: linear-gradient(225deg, #a6a6a6 0%, #595959 59%, #404040 99%);
+  color: #fff;
+}
+.embarc-dark .strips {
   position: absolute;
-  right: 14px;
-  bottom: 8px;
-  font-size: 14px;
-  color: #aaa;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 17px;
+}
+.embarc-dark .strips i {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 246px;
+}
+.embarc-dark .strips i:nth-child(1) { left: 0; background: #e17a7c; }
+.embarc-dark .strips i:nth-child(2) { left: 242px; background: #98d6f5; }
+.embarc-dark .strips i:nth-child(3) { left: 484px; background: #f8eaae; }
+.embarc-dark .strips i:nth-child(4) { left: 730px; background: #b6d8d5; width: 230px; }
+.embarc-dark .logo {
+  position: absolute;
+  left: 780px;
+  top: 442px;
+  width: 161px;
 }
 
 .slidev-layout h2 {
@@ -161,6 +181,10 @@ body,
 
 .code-xs {
   --slidev-code-font-size: 13.5px;
+}
+
+.compact-code {
+  --slidev-code-line-height: 1.3;
 }
 
 .code-lg {

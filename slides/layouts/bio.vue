@@ -20,7 +20,6 @@
     <img class="abs" src="/embarc/s3-8-754x265.png" style="left:754px;top:265px;width:205px" alt="Java Champions" />
     <img class="abs" src="/embarc/s3-10-814x344.png" style="left:814px;top:344px;width:145px" alt="Cyberland" />
     <img class="abs" src="/embarc/s3-6-827x441.png" style="left:827px;top:441px;width:92px" alt="JUG Darmstadt" />
-    <div class="page-no"><SlideCurrentNo /></div>
   </div>
 </template>
 
@@ -37,7 +36,7 @@
 .bio .intro {
   position: absolute;
   left: 56px;
-  top: 128px;
+  top: 150px;
   width: 640px;
   font-size: 27px;
 }

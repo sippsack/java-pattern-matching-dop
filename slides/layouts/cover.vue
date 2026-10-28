@@ -17,34 +17,6 @@ defineProps<{ image?: string }>()
 </template>
 
 <style>
-.embarc-dark {
-  background: linear-gradient(225deg, #a6a6a6 0%, #595959 59%, #404040 99%) !important;
-  color: #fff;
-}
-.embarc-dark .strips {
-  position: absolute;
-  left: 0;
-  bottom: -4px;
-  width: 100%;
-  height: 17px;
-}
-.embarc-dark .strips i {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  width: 246px;
-}
-.embarc-dark .strips i:nth-child(1) { left: 0; background: #e17a7c; }
-.embarc-dark .strips i:nth-child(2) { left: 242px; background: #98d6f5; }
-.embarc-dark .strips i:nth-child(3) { left: 484px; background: #f8eaae; }
-.embarc-dark .strips i:nth-child(4) { left: 730px; background: #b6d8d5; width: 230px; }
-.embarc-dark .logo {
-  position: absolute;
-  left: 780px;
-  top: 442px;
-  width: 161px;
-}
-
 .cover .oval {
   position: absolute;
   left: 737px;

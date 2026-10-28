@@ -28,7 +28,7 @@ const contacts = [
   left: 518px; top: 190px; width: 491px; height: 491px;
   border-radius: 50%; background: #98d6f5;
 }
-.thanks .ask { left: 59px; top: 135px; font-size: 30px; }
+.thanks .ask { left: 59px; top: 150px; font-size: 30px; }
 .thanks .row { left: 68px; height: 46px; display: flex; align-items: center; gap: 16px; font-size: 28px; }
 .thanks .row img { width: 33px; height: 33px; }
 </style>

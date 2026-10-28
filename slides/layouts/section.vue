@@ -19,19 +19,13 @@ defineProps<{ image?: string; number?: string }>()
 
 <style>
 .section .num {
-  position: relative;
-  flex: 1 1 0;
-  min-height: 0;
-  margin-bottom: 14px;
-  container-type: size;
+  margin-bottom: 24px;
 }
 .section .num span {
-  position: absolute;
-  left: -0.4em;
-  bottom: 0;
-  font-size: 140cqh;
+  display: block;
+  font-size: 156px;
   font-weight: 700;
-  line-height: 0.7;
+  line-height: 0.9;
   color: #f7dd49;
   white-space: nowrap;
 }

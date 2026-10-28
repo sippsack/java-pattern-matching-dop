@@ -125,7 +125,7 @@ const items = [
   display: flex;
   align-items: center;
   gap: 12px;
-  height: 104px;
+  height: 96px;
   padding: 0 14px;
   border-radius: 14px;
   white-space: normal;
@@ -182,7 +182,7 @@ const items = [
 }
 
 .legend {
-  margin-top: 18px;
+  margin-top: 14px;
   font-size: 18px;
 }
 

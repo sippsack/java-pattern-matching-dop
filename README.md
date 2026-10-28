@@ -22,6 +22,28 @@ npm run dev
 `npm run export` erzeugt `slides/pattern-matching-dop.pdf` und benötigt Chromium.
 Der PDF-Export ist nicht Teil der Pages-Veröffentlichung.
 
+## Layout
+
+Das Layout folgt dem überarbeiteten Valhalla-Vortrag: Rajdhani für Text,
+Fira Code für Code, bündig ausgerichtete gelbe Titelunterstreichungen und
+ein Inhaltsbeginn bei 150 Pixeln auf der 960 × 540 großen Folienfläche.
+Beide Schriftfamilien werden lokal eingebunden.
+
+`slides/global-top.vue` zeigt auf Inhaltsfolien die graue Seitenleiste mit
+embarc-Logo, Website, dem Kurztitel „Pattern Matching und DOP“ und der aktuellen
+Foliennummer. Der vollständige Vortragstitel bleibt in den Metadaten erhalten.
+Die Titelfolie blendet die Leiste automatisch aus; Kapiteltrenner, Ganzseitenbild
+und Spicker-Motiv sind in `slides.md` mit `sidebar: false` markiert. Diese
+Markierung auch für neue vollflächige oder dunkle Folien verwenden.
+Die Seitenleiste erscheint ebenfalls in der Druck-/PDF-Ansicht.
+
+Gemeinsame Styles für Titel- und Kapiteltrenner liegen in `slides/styles/index.css`,
+damit auch direkt aufgerufene Kapitel ohne vorherigen Besuch der Titelfolie
+korrekt dargestellt werden. Logo und Spicker-Motiv sind aus dem Referenzvortrag
+nach `slides/public/embarc/` übernommen; es gibt keine Laufzeitabhängigkeit
+von dessen Verzeichnis. Die veröffentlichte betterCode-Tag-Version bleibt
+von diesen Layoutänderungen unberührt.
+
 ## GitHub Pages
 
 GitHub Pages ist im Repository unter **Settings → Pages → Source: GitHub Actions**
